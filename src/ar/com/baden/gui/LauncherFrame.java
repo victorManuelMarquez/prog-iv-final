@@ -1,21 +1,31 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.gui.component.InfoPane;
+
 import javax.swing.*;
 import javax.swing.text.Caret;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LauncherFrame extends JFrame {
 
     private LauncherFrame(String title) throws HeadlessException {
         super(title);
+        // variables
+        LaunchWorker worker;
+
         // componentes
-        JTextPane infoPane = new JTextPane();
+        InfoPane infoPane = new InfoPane();
         JScrollPane scrollPane = new JScrollPane(infoPane);
         JProgressBar progressBar = new JProgressBar();
 
         // instalando componentes
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         getContentPane().add(progressBar, BorderLayout.SOUTH);
+
+        // se requiere que el componente esté instalado para las operaciones
+        worker = new LaunchWorker(infoPane);
 
         /* AJUSTES */
         // ventana
@@ -34,6 +44,26 @@ public class LauncherFrame extends JFrame {
         caret.setVisible(false);
         // barra de progreso
         progressBar.setStringPainted(true);
+
+        // eventos
+        worker.addPropertyChangeListener(evt -> {
+            if ("progress".equals(evt.getPropertyName())) {
+                if (evt.getNewValue() instanceof Integer percentage) {
+                    progressBar.setValue(percentage);
+                }
+            }
+        });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                worker.execute();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                worker.cancel(true);
+            }
+        });
     }
 
     private void calculateSize() {
