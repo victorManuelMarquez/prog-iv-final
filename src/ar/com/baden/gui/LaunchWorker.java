@@ -46,6 +46,7 @@ public class LaunchWorker extends SwingWorker<Void, String> {
             Object ignore = get();
             ancestor.setVisible(false);
             ancestor.dispose();
+            MainFrame.createAndShow();
         } catch (CancellationException e) {
             System.out.println("cancelado por el usuario.");
         } catch (Exception e) {

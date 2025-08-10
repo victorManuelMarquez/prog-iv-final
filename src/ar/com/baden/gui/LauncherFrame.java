@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class LauncherFrame extends JFrame {
+public class LauncherFrame extends JFrame implements ISizeCalculation {
 
     private LauncherFrame(String title) throws HeadlessException {
         super(title);
@@ -66,7 +66,7 @@ public class LauncherFrame extends JFrame {
         });
     }
 
-    private void calculateSize() {
+    public void calculateSize() {
         Dimension mainScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = Math.ceilDiv(mainScreenSize.width, 3);
         int height = Math.ceilDiv(mainScreenSize.height, 3);
