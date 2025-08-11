@@ -2,14 +2,34 @@ package ar.com.baden.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame implements ISizeCalculation {
 
     private MainFrame(String title) throws HeadlessException {
         super(title);
-        // ajustes
+        // variables
+        setJMenuBar(new JMenuBar());
+
+        // componentes
+        JMenu fileMenu = new JMenu("Archivo");
+        JMenuItem exitItem = new JMenuItem("Salir");
+
+        // instalando componentes
+        fileMenu.add(exitItem);
+        getJMenuBar().add(fileMenu);
+
+        /* ajustes */
+        // ventana
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
+        // componentes
+        fileMenu.setMnemonic(KeyEvent.VK_A);
+        exitItem.setMnemonic(KeyEvent.VK_S);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_DOWN_MASK));
+
+        // eventos
+        exitItem.addActionListener(_ -> dispose());
     }
 
     public void calculateSize() {
