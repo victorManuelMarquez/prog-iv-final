@@ -22,7 +22,7 @@ public class LaunchWorker extends SwingWorker<Void, String> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        int totalSeconds = 10;
+        int totalSeconds = 5;
         int countdown = totalSeconds;
         while (countdown >= 0) {
             publish("Cuenta atrás: " + countdown + System.lineSeparator());

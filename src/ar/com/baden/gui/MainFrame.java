@@ -1,5 +1,7 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.gui.component.ClosingDialog;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -48,11 +50,7 @@ public class MainFrame extends JFrame implements ISizeCalculation {
     }
 
     private void showClosingDialog() {
-        int option = JOptionPane.OK_CANCEL_OPTION;
-        int icon = JOptionPane.QUESTION_MESSAGE;
-        String message = "¿Está seguro de abandonar el programa?";
-        String title = "Confirmar cierre";
-        int response = JOptionPane.showConfirmDialog(this, message, title, option, icon);
+        int response = ClosingDialog.createAndShow(this);
         if (response == JOptionPane.OK_OPTION) {
             dispose();
         }
