@@ -15,8 +15,6 @@ public class ClosingDialog extends ModalDialog {
         GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
         LayoutStyle.ComponentPlacement unrelated = LayoutStyle.ComponentPlacement.UNRELATED;
         GroupLayout groupLayout = new GroupLayout(getContentPane());
-        groupLayout.setAutoCreateGaps(true);
-        groupLayout.setAutoCreateContainerGaps(true);
         String message = "¿Está seguro de abandonar del programa?";
         String confirmExit = "No preguntar nuevamente";
         String exit = "Salir";
@@ -52,6 +50,8 @@ public class ClosingDialog extends ModalDialog {
                         .addComponent(cancelBtn)));
 
         // ajustes
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
         setLayout(groupLayout);
         getRootPane().setDefaultButton(exitButton);
         confirmExitBtn.setMnemonic(KeyEvent.VK_N);

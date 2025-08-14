@@ -1,6 +1,6 @@
 package ar.com.baden.gui;
 
-interface ISizeCalculation {
+public interface ISizeCalculation {
 
     void calculateSize();
 

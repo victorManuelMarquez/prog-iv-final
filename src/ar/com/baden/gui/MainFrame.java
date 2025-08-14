@@ -1,6 +1,7 @@
 package ar.com.baden.gui;
 
 import ar.com.baden.gui.component.ClosingDialog;
+import ar.com.baden.gui.component.SettingsDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,12 @@ public class MainFrame extends JFrame implements ISizeCalculation {
 
         // componentes
         JMenu fileMenu = new JMenu("Archivo");
+        JMenuItem settingsItem = new JMenuItem("Configuración");
         JMenuItem exitItem = new JMenuItem("Salir");
 
         // instalando componentes
+        fileMenu.add(settingsItem);
+        fileMenu.addSeparator();
         fileMenu.add(exitItem);
         getJMenuBar().add(fileMenu);
 
@@ -29,10 +33,12 @@ public class MainFrame extends JFrame implements ISizeCalculation {
         setExtendedState(MAXIMIZED_BOTH);
         // componentes
         fileMenu.setMnemonic(KeyEvent.VK_A);
+        settingsItem.setMnemonic(KeyEvent.VK_C);
         exitItem.setMnemonic(KeyEvent.VK_S);
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_DOWN_MASK));
 
         // eventos
+        settingsItem.addActionListener(_ -> SettingsDialog.createAndShow(this));
         exitItem.addActionListener(_ -> showClosingDialog());
         addWindowListener(new WindowAdapter() {
             @Override
