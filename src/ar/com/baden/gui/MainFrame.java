@@ -2,6 +2,7 @@ package ar.com.baden.gui;
 
 import ar.com.baden.gui.component.ClosingDialog;
 import ar.com.baden.gui.component.SettingsDialog;
+import ar.com.baden.main.App;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,9 +57,16 @@ public class MainFrame extends JFrame implements ISizeCalculation {
     }
 
     private void showClosingDialog() {
-        int response = ClosingDialog.createAndShow(this);
-        if (response == JOptionPane.OK_OPTION) {
-            dispose();
+        if (App.settings.containsKey("settings.showClosingDialog")) {
+            String value = App.settings.getProperty("settings.showClosingDialog");
+            if (Boolean.parseBoolean(value)) {
+                int response = ClosingDialog.createAndShow(this);
+                if (response == JOptionPane.OK_OPTION) {
+                    dispose();
+                }
+            } else {
+                dispose();
+            }
         }
     }
 
