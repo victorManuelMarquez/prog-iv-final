@@ -15,8 +15,7 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         LayoutStyle.ComponentPlacement related = LayoutStyle.ComponentPlacement.RELATED;
         GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
         // componentes
-        JTabbedPane settingsTab = new JTabbedPane();
-        settingsTab.addTab("General", new JPanel());
+        SettingsTreePanel treePanel = new SettingsTreePanel();
         JButton resetButton = new JButton("Restablecer");
         JButton okButton = new JButton("Aceptar");
         JButton applyBtn = new JButton("Aplicar");
@@ -24,7 +23,7 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
 
         // instalando componentes
         groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-                .addComponent(settingsTab)
+                .addComponent(treePanel)
                 .addGroup(groupLayout.createSequentialGroup()
                         .addComponent(resetButton)
                         .addPreferredGap(related, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -33,7 +32,7 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
                         .addComponent(cancelBtn)));
 
         groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-                .addComponent(settingsTab)
+                .addComponent(treePanel)
                 .addGroup(groupLayout.createParallelGroup(leading)
                     .addComponent(resetButton)
                     .addComponent(okButton)
