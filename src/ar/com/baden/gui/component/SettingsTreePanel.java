@@ -26,7 +26,7 @@ public class SettingsTreePanel extends JPanel {
         JTree tree = new JTree(rootNode);
         JScrollPane westScrollPane = new JScrollPane(tree);
         JPanel cardsPanel = new JPanel(cardLayout);
-        JPanel generalPanel = new JPanel(new BorderLayout());
+        JPanel generalPanel = new SettingsGeneralPanel();
         JPanel themesPanel = new JPanel(new BorderLayout());
         JPanel fontsPanel = new JPanel(new BorderLayout());
         JScrollPane centerScrollPane = new JScrollPane(cardsPanel);
@@ -63,7 +63,6 @@ public class SettingsTreePanel extends JPanel {
             }
             Object selectedItem = lastSelection.getUserObject();
             if (lastSelection.isLeaf()) {
-                System.out.println("Mostrando: " + selectedItem);
                 cardLayout.show(cardsPanel, selectedItem.toString());
             }
         });
