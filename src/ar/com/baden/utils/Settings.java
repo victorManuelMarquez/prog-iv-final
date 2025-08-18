@@ -23,6 +23,7 @@ public class Settings extends Properties {
         Object old = super.put(key, value);
         boolean isDefault = defaults.containsKey(key) && defaults.get(key).equals(value);
         String propertyName = isDefault ? "default" : (old != null) ? "update" : "new";
+        propertyName = createKey(propertyName);
         firePropertyChangeListeners(new PropertyChangeEvent(this, propertyName, old, value));
         return old;
     }

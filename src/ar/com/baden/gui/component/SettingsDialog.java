@@ -1,10 +1,14 @@
 package ar.com.baden.gui.component;
 
 import ar.com.baden.gui.ISizeCalculation;
+import ar.com.baden.main.App;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
 
 public class SettingsDialog extends ModalDialog implements ISizeCalculation {
 
@@ -14,6 +18,7 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         LayoutStyle.ComponentPlacement related = LayoutStyle.ComponentPlacement.RELATED;
         GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
+        PropertyChangeListener settingsChanges;
         // componentes
         SettingsTreePanel treePanel = new SettingsTreePanel();
         JButton resetButton = new JButton("Restablecer");
@@ -46,12 +51,24 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         getRootPane().setDefaultButton(okButton);
         resetButton.setMnemonic(KeyEvent.VK_R);
         okButton.setMnemonic(KeyEvent.VK_A);
+        applyBtn.setEnabled(false);
         applyBtn.setMnemonic(KeyEvent.VK_P);
         cancelBtn.setMnemonic(KeyEvent.VK_C);
         setResizable(false);
 
         // eventos
         SwingUtilities.invokeLater(okButton::requestFocusInWindow);
+        settingsChanges = changeEvent -> {
+            String propertyName = changeEvent.getPropertyName();
+            applyBtn.setEnabled("settings.update".equals(propertyName));
+        };
+        App.settings.addPropertyChangeListener(settingsChanges);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                App.settings.removePropertyChangeListener(settingsChanges);
+            }
+        });
     }
 
     @Override

@@ -26,6 +26,12 @@ public class SettingsGeneralPanel extends JPanel {
         groupLayout.setAutoCreateContainerGaps(true);
         setLayout(groupLayout);
         showClosingDialog.setSelected(confirmToClose);
+
+        // eventos
+        showClosingDialog.addActionListener(_ -> {
+            boolean value = showClosingDialog.isSelected();
+            App.settings.setProperty("settings.showClosingDialog", String.valueOf(value));
+        });
     }
 
 }
