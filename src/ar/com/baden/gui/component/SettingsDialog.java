@@ -33,16 +33,16 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
                         .addComponent(resetButton)
                         .addPreferredGap(related, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
                         .addComponent(okButton)
-                        .addComponent(applyBtn)
-                        .addComponent(cancelBtn)));
+                        .addComponent(cancelBtn)
+                        .addComponent(applyBtn)));
 
         groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
                 .addComponent(treePanel)
                 .addGroup(groupLayout.createParallelGroup(leading)
                     .addComponent(resetButton)
                     .addComponent(okButton)
-                    .addComponent(applyBtn)
-                    .addComponent(cancelBtn)));
+                    .addComponent(cancelBtn)
+                    .addComponent(applyBtn)));
 
         // ajustes
         groupLayout.setAutoCreateGaps(true);
@@ -56,14 +56,33 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         cancelBtn.setMnemonic(KeyEvent.VK_C);
         setResizable(false);
 
-        // eventos
+        /* eventos */
         SwingUtilities.invokeLater(okButton::requestFocusInWindow);
-        settingsChanges = changeEvent -> {
-            String propertyName = changeEvent.getPropertyName();
-            applyBtn.setEnabled("settings.update".equals(propertyName));
-        };
+        // este oyente notificará al botón "Aplicar" ante cualquier cambio en la configuración
+        // y deberá removerse de la misma al cerrar esta ventana
+        settingsChanges = _ -> applyBtn.setEnabled(App.settings.hasChanges());
         App.settings.addPropertyChangeListener(settingsChanges);
+        // Botones
+        resetButton.addActionListener(_ -> App.settings.loadDefaults());
+        okButton.addActionListener(_ -> {
+            App.settings.applyChanges();
+            dispose();
+        });
+        applyBtn.addActionListener(_ -> {
+            App.settings.applyChanges();
+            okButton.requestFocusInWindow();
+        });
+        cancelBtn.addActionListener(_ -> {
+            App.settings.clearChanges();
+            dispose();
+        });
+        // ventana
         addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                App.settings.clearChanges();
+            }
+
             @Override
             public void windowClosed(WindowEvent e) {
                 App.settings.removePropertyChangeListener(settingsChanges);

@@ -3,29 +3,29 @@ package ar.com.baden.utils;
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class Settings extends Properties {
 
     public static final String BASE_KEY = "settings";
     private final List<PropertyChangeListener> listeners;
+    private final Map<Object, Object> buffer;
 
     public Settings() {
         super(new Properties());
         setDefaults();
         listeners = new ArrayList<>();
+        buffer = new HashMap<>();
     }
 
     @Override
     public synchronized Object put(Object key, Object value) {
-        Object old = super.put(key, value);
-        boolean isDefault = defaults.containsKey(key) && defaults.get(key).equals(value);
-        String propertyName = isDefault ? "default" : (old != null) ? "update" : "new";
+        Object bufferValue = buffer.put(key, value);
+        boolean isUpdate = containsKey(key) && !get(key).equals(value);
+        String propertyName = isUpdate ? "updatedValue" : "restoredValue";
         propertyName = createKey(propertyName);
-        firePropertyChangeListeners(new PropertyChangeEvent(this, propertyName, old, value));
-        return old;
+        notifyListeners(new PropertyChangeEvent(this, propertyName, bufferValue, value));
+        return bufferValue;
     }
 
     private String createKey(String value) {
@@ -50,10 +50,32 @@ public class Settings extends Properties {
     }
 
     public void loadDefaults() {
-        putAll(defaults);
+        buffer.clear();
+        super.putAll(defaults);
+        String propertyName = createKey("defaultsApplied");
+        notifyListeners(new PropertyChangeEvent(this, propertyName, false, true));
     }
 
-    protected void firePropertyChangeListeners(PropertyChangeEvent event) {
+    public void applyChanges() {
+        if (!buffer.isEmpty()) {
+            super.putAll(buffer);
+            buffer.clear();
+            String propertyName = createKey("changesApplied");
+            notifyListeners(new PropertyChangeEvent(this, propertyName, true, false));
+        }
+    }
+
+    public void clearChanges() {
+        buffer.clear();
+        String propertyName = createKey("changesDiscarded");
+        notifyListeners(new PropertyChangeEvent(this, propertyName, false, true));
+    }
+
+    public boolean hasChanges() {
+        return !buffer.isEmpty();
+    }
+
+    protected void notifyListeners(PropertyChangeEvent event) {
         listeners.forEach(l -> l.propertyChange(event));
     }
 
