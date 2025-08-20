@@ -5,7 +5,8 @@ import ar.com.baden.main.App;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ClosingDialog extends ModalDialog {
 
@@ -63,25 +64,24 @@ public class ClosingDialog extends ModalDialog {
 
         // eventos
         SwingUtilities.invokeLater(exitButton::requestFocusInWindow);
-        PropertyChangeListener changeListener = evt -> {
-            App.settings.forEach((k, v) -> System.out.println(k + " -> " + v));
-            System.out.print(evt.getPropertyName() + ": ");
-            System.out.println(evt.getOldValue() + " -> " + evt.getNewValue());
-        };
-        App.settings.addPropertyChangeListener(changeListener);
         confirmExitBtn.addActionListener(_ -> {
             String newValue = Boolean.toString(!confirmExitBtn.isSelected());
             App.settings.setProperty("settings.showClosingDialog", newValue);
         });
         exitButton.addActionListener(_ -> {
             response = JOptionPane.OK_OPTION;
-            App.settings.removePropertyChangeListener(changeListener);
+            App.settings.applyChanges();
             dispose();
         });
         cancelBtn.addActionListener(_ -> {
             response = JOptionPane.CANCEL_OPTION;
-            App.settings.removePropertyChangeListener(changeListener);
             dispose();
+        });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                App.settings.clearChanges();
+            }
         });
     }
 
