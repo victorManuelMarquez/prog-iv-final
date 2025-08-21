@@ -1,9 +1,11 @@
 package ar.com.baden.utils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+import java.util.List;
 
 public class Settings extends Properties {
 
@@ -46,6 +48,16 @@ public class Settings extends Properties {
             UIDefaults uiDefaults = lookAndFeel.getDefaults();
             boolean boldMetal = !uiDefaults.containsKey(boldMetalKey) || uiDefaults.getBoolean(boldMetalKey);
             defaults.setProperty(createKey(boldMetalKey), String.valueOf(boldMetal));
+        }
+        Enumeration<Object> keys = lookAndFeel.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Font font = lookAndFeel.getDefaults().getFont(key);
+            if (font != null) {
+                defaults.setProperty(createKey(key.toString()).concat(".family"), font.getFamily());
+                defaults.setProperty(createKey(key.toString()).concat(".style"), String.valueOf(font.getStyle()));
+                defaults.setProperty(createKey(key.toString()).concat(".size"), String.valueOf(font.getSize()));
+            }
         }
     }
 
