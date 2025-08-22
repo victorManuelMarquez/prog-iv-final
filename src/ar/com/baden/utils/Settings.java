@@ -22,7 +22,7 @@ public class Settings extends Properties {
 
     @Override
     public synchronized Object put(Object key, Object value) {
-        Object bufferValue = buffer.put(key, value);
+        Object bufferValue = buffer.containsKey(key) ? buffer.remove(key) : buffer.put(key, value);
         boolean isUpdate = containsKey(key) && !get(key).equals(value);
         String propertyName = isUpdate ? "updatedValue" : "restoredValue";
         propertyName = createKey(propertyName);
