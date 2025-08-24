@@ -16,6 +16,9 @@ public class GeneralPanel extends JPanel {
         // ajustes
         showClosingDialog.setSelected(confirmToClose);
 
+        // instalando componentes
+        add(showClosingDialog);
+
         // eventos
         showClosingDialog.addActionListener(_ -> {
             boolean value = showClosingDialog.isSelected();
