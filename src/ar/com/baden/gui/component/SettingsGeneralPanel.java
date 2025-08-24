@@ -7,22 +7,18 @@ public class SettingsGeneralPanel extends JPanel {
     public SettingsGeneralPanel() {
         super(null);
         /* variables */
-        GroupLayout groupLayout = new GroupLayout(this);
+        BoxLayout verticalBoxLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
 
         // componentes
         GeneralPanel generalPanel = new GeneralPanel();
+        ThemePanel themePanel = new ThemePanel("Apariencia");
 
         // instalando componentes
-        groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-                .addComponent(generalPanel));
-
-        groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-                .addComponent(generalPanel));
+        add(generalPanel);
+        add(themePanel);
 
         // ajustes
-        groupLayout.setAutoCreateGaps(true);
-        groupLayout.setAutoCreateContainerGaps(true);
-        setLayout(groupLayout);
+        setLayout(verticalBoxLayout);
     }
 
 }
