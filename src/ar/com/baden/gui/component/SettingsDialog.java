@@ -74,6 +74,7 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         });
         cancelBtn.addActionListener(_ -> {
             App.settings.clearChanges();
+            restoreTheme();
             dispose();
         });
         // ventana
@@ -96,6 +97,19 @@ public class SettingsDialog extends ModalDialog implements ISizeCalculation {
         int width = (int) Math.ceil(mainScreenSize.width * 0.5);
         int height = (int) Math.ceil(mainScreenSize.height * 0.75);
         setSize(new Dimension(width, height));
+    }
+
+    private void restoreTheme() {
+        String className = App.settings.getProperty("settings.lookAndFeel.className");
+        try {
+            UIManager.setLookAndFeel(className);
+            SwingUtilities.updateComponentTreeUI(this);
+            if (getOwner() != null) {
+                SwingUtilities.updateComponentTreeUI(getOwner());
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public static void createAndShow(Window owner) {

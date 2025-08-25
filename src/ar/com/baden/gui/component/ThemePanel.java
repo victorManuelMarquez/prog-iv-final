@@ -1,5 +1,7 @@
 package ar.com.baden.gui.component;
 
+import ar.com.baden.main.App;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -38,15 +40,17 @@ public class ThemePanel extends JPanel {
             Object selection = lafCombo.getSelectedItem();
             if (selection instanceof UIManager.LookAndFeelInfo info) {
                 Window ancestor = SwingUtilities.getWindowAncestor(this);
-                if (ancestor instanceof JDialog dialog) {
-                    ancestor = dialog.getOwner();
-                }
+                ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 try {
                     UIManager.setLookAndFeel(info.getClassName());
                     SwingUtilities.updateComponentTreeUI(ancestor);
-                    for (Window window : ancestor.getOwnedWindows()) {
-                        SwingUtilities.updateComponentTreeUI(window);
+                    Window owner = ancestor.getOwner();
+                    if (owner != null) {
+                        SwingUtilities.updateComponentTreeUI(owner);
                     }
+                    App.settings.setProperty("settings.lookAndFeel.className", info.getClassName());
+                    App.settings.setProperty("settings.lookAndFeel.id", info.getName());
+                    ancestor.setCursor(Cursor.getDefaultCursor());
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
                 }
