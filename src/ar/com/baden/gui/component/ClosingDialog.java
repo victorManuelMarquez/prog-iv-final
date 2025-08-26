@@ -67,10 +67,10 @@ public class ClosingDialog extends ModalDialog {
         confirmExitBtn.addActionListener(_ -> {
             String newValue = Boolean.toString(!confirmExitBtn.isSelected());
             App.settings.setProperty("settings.showClosingDialog", newValue);
+            App.settings.applyChanges();
         });
         exitButton.addActionListener(_ -> {
             response = JOptionPane.OK_OPTION;
-            App.settings.applyChanges();
             dispose();
         });
         cancelBtn.addActionListener(_ -> {
