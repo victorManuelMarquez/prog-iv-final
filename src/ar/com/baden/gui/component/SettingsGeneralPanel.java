@@ -11,11 +11,11 @@ public class SettingsGeneralPanel extends JPanel {
 
         // componentes
         GeneralPanel generalPanel = new GeneralPanel();
-        ThemePanel themePanel = new ThemePanel("Apariencia");
+        LookPanel lookPanel = new LookPanel("Apariencia");
 
         // instalando componentes
         add(generalPanel);
-        add(themePanel);
+        add(lookPanel);
 
         // ajustes
         setLayout(verticalBoxLayout);

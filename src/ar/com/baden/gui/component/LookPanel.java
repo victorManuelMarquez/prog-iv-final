@@ -7,33 +7,43 @@ import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
-public class ThemePanel extends JPanel {
+public class LookPanel extends SectionPanel {
 
-    public ThemePanel(String name) {
-        super(new BorderLayout());
+    public LookPanel(String name) {
+        super(name);
+        // variables
+        GroupLayout groupLayout = new GroupLayout(getMainContainer());
+        GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
+        GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
 
         // componentes
-        JPanel north = new JPanel(new GridBagLayout());
-        JPanel center = new JPanel();
+        JLabel themeLabel = new JLabel("Tema");
         JComboBox<UIManager.LookAndFeelInfo> lafCombo = new JComboBox<>(createModel());
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
+        JLabel familyLabel = new JLabel("Familia");
+        JComboBox<String> familiesCombo = new JComboBox<>();
 
         // instalando componentes
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 4, 4, 4);
-        north.add(new JLabel(name), gbc);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1.0;
-        north.add(new JSeparator(), gbc);
+        groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
+                .addGroup(groupLayout.createParallelGroup(leading)
+                        .addComponent(themeLabel)
+                        .addComponent(familyLabel))
+                .addGroup(groupLayout.createParallelGroup(leading)
+                        .addComponent(lafCombo)
+                        .addComponent(familiesCombo)));
 
-        add(north, BorderLayout.NORTH);
-        center.add(new JLabel("Tema"));
-        center.add(lafCombo);
-        add(center, BorderLayout.CENTER);
+        groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+                .addGroup(groupLayout.createParallelGroup(baseline)
+                        .addComponent(themeLabel)
+                        .addComponent(lafCombo))
+                .addGroup(groupLayout.createParallelGroup(baseline)
+                        .addComponent(familyLabel)
+                        .addComponent(familiesCombo)));
 
         // ajustes
-        setName(name);
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
+        getMainContainer().setLayout(groupLayout);
 
         // eventos
         lafCombo.addActionListener(_ -> {
