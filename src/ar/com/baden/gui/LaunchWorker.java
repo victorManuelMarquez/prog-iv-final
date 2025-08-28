@@ -22,6 +22,7 @@ public class LaunchWorker extends SwingWorker<Void, String> {
 
     @Override
     protected Void doInBackground() throws Exception {
+        ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int totalSeconds = 2;
         int countdown = totalSeconds;
         while (countdown >= 0) {
@@ -43,6 +44,7 @@ public class LaunchWorker extends SwingWorker<Void, String> {
     @Override
     protected void done() {
         try {
+            ancestor.setCursor(Cursor.getDefaultCursor());
             Object ignore = get();
             ancestor.setVisible(false);
             ancestor.dispose();
