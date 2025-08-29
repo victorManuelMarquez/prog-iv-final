@@ -1,11 +1,15 @@
 package ar.com.baden.gui;
 
 import ar.com.baden.gui.component.InfoPane;
+import ar.com.baden.task.FontFamiliesLoader;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LaunchWorker extends SwingWorker<Void, String> {
 
@@ -23,6 +27,11 @@ public class LaunchWorker extends SwingWorker<Void, String> {
     @Override
     protected Void doInBackground() throws Exception {
         ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try (ExecutorService service = Executors.newSingleThreadExecutor()) {
+            publish(service.submit(new FontFamiliesLoader()).get());
+        } catch (ExecutionException | InterruptedException e) {
+            infoPane.appendText(findCause(e), infoPane.getErrorStyle());
+        }
         int totalSeconds = 2;
         int countdown = totalSeconds;
         while (countdown >= 0) {
