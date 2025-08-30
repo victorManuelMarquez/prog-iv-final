@@ -4,8 +4,10 @@ import ar.com.baden.main.App;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Stream;
 
 public class LookPanel extends SectionPanel {
 
@@ -21,7 +23,8 @@ public class LookPanel extends SectionPanel {
         JComboBox<UIManager.LookAndFeelInfo> lafCombo = new JComboBox<>(createModel());
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
         JLabel familyLabel = new JLabel("Familia");
-        JComboBox<String> familiesCombo = new JComboBox<>();
+        JComboBox<String> familiesCombo = new JComboBox<>(new Vector<>(App.availableFontFamilyNames));
+        familiesCombo.setSelectedItem(familiesCombo.getFont().getFamily());
 
         // instalando componentes
         groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
@@ -46,6 +49,14 @@ public class LookPanel extends SectionPanel {
         getMainContainer().setLayout(groupLayout);
 
         // eventos
+        ActionListener familyChangeListener = _ -> {
+            Object selection = familiesCombo.getSelectedItem();
+            if (selection != null) {
+                Stream<Object> families;
+                families = App.settings.keySet().stream().filter(k -> k.toString().endsWith(".family"));
+                families.forEach(k -> App.settings.setProperty(k.toString(), selection.toString()));
+            }
+        };
         lafCombo.addActionListener(_ -> {
             Object selection = lafCombo.getSelectedItem();
             if (selection instanceof UIManager.LookAndFeelInfo info) {
@@ -58,6 +69,9 @@ public class LookPanel extends SectionPanel {
                     if (owner != null) {
                         SwingUtilities.updateComponentTreeUI(owner);
                     }
+                    familiesCombo.removeActionListener(familyChangeListener);
+                    familiesCombo.setSelectedItem(familiesCombo.getFont().getFamily());
+                    familiesCombo.addActionListener(familyChangeListener);
                     App.settings.setProperty("settings.lookAndFeel.className", info.getClassName());
                     App.settings.setProperty("settings.lookAndFeel.id", info.getName());
                     ancestor.setCursor(Cursor.getDefaultCursor());
@@ -66,6 +80,7 @@ public class LookPanel extends SectionPanel {
                 }
             }
         });
+        familiesCombo.addActionListener(familyChangeListener);
     }
 
     private ComboBoxModel<UIManager.LookAndFeelInfo> createModel() {

@@ -1,5 +1,7 @@
 package ar.com.baden.task;
 
+import ar.com.baden.main.App;
+
 import java.awt.*;
 import java.util.concurrent.Callable;
 
@@ -20,6 +22,7 @@ public class FontFamiliesLoader implements Callable<String> {
         StringBuilder buffer = new StringBuilder("Cargando fuentes...\n");
         for (String name : availableFontFamilyNames) {
             buffer.append("Fuente: ").append(name).append("\n");
+            App.availableFontFamilyNames.add(name);
         }
         buffer.append("Total: ").append(total).append(" fuentes.\n");
         return buffer.toString();
