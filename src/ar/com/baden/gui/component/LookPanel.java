@@ -60,6 +60,9 @@ public class LookPanel extends SectionPanel {
         lafCombo.addActionListener(_ -> {
             Object selection = lafCombo.getSelectedItem();
             if (selection instanceof UIManager.LookAndFeelInfo info) {
+                if (info.getClassName().equals(UIManager.getLookAndFeel().getClass().getName())) {
+                    return;
+                }
                 Window ancestor = SwingUtilities.getWindowAncestor(this);
                 ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 try {
