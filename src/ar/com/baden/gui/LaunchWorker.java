@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,19 +28,8 @@ public class LaunchWorker extends SwingWorker<Void, String> {
         ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try (ExecutorService service = Executors.newSingleThreadExecutor()) {
             publish(service.submit(new FontFamiliesLoader()).get());
-        } catch (ExecutionException | InterruptedException e) {
-            infoPane.appendText(findCause(e), infoPane.getErrorStyle());
         }
-        int totalSeconds = 2;
-        int countdown = totalSeconds;
-        while (countdown >= 0) {
-            publish("Cuenta atrás: " + countdown + System.lineSeparator());
-            setProgress(countdown * 100 / totalSeconds);
-            if (!isCancelled()) {
-                Thread.sleep(1000);
-            }
-            countdown--;
-        }
+        setProgress(100);
         return null;
     }
 
