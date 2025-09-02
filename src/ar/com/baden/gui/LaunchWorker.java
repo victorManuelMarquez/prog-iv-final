@@ -30,6 +30,8 @@ public class LaunchWorker extends SwingWorker<Void, String> {
             publish(service.submit(new FontFamiliesLoader()).get());
         }
         setProgress(100);
+        // este delay permite que los componentes de la ventana principal se muestren correctamente
+        Thread.sleep(1000);
         return null;
     }
 
