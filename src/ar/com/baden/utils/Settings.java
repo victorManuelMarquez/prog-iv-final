@@ -6,6 +6,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Settings extends Properties {
 
@@ -85,6 +86,14 @@ public class Settings extends Properties {
 
     public boolean hasChanges() {
         return !buffer.isEmpty();
+    }
+
+    public void clearChanges(String suffix) {
+        Stream<Object> keys = buffer.keySet().stream().filter(k -> k.toString().startsWith(suffix));
+        List<Object> copy = List.copyOf(keys.toList());
+        copy.forEach(buffer::remove);
+        String propertyName = createKey(suffix + "...");
+        notifyListeners(new PropertyChangeEvent(this, propertyName, false, true));
     }
 
     protected void notifyListeners(PropertyChangeEvent event) {
