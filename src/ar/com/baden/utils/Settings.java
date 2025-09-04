@@ -23,8 +23,11 @@ public class Settings extends Properties {
 
     @Override
     public synchronized Object put(Object key, Object value) {
-        Object bufferValue = buffer.containsKey(key) ? buffer.remove(key) : buffer.put(key, value);
+        Object bufferValue = buffer.put(key, value);
         boolean isUpdate = containsKey(key) && !get(key).equals(value);
+        if (!isUpdate) {
+            bufferValue = buffer.remove(key);
+        }
         String propertyName = isUpdate ? "updatedValue" : "restoredValue";
         propertyName = createKey(propertyName);
         notifyListeners(new PropertyChangeEvent(this, propertyName, bufferValue, value));
@@ -88,6 +91,7 @@ public class Settings extends Properties {
         return !buffer.isEmpty();
     }
 
+    @Deprecated
     public void clearChanges(String suffix) {
         Stream<Object> keys = buffer.keySet().stream().filter(k -> k.toString().startsWith(suffix));
         List<Object> copy = List.copyOf(keys.toList());
