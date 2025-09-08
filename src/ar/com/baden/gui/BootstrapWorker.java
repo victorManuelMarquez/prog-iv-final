@@ -18,6 +18,11 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
     public BootstrapWorker(InfoTextPane textPane) {
         this.textPane = textPane;
         ancestor = SwingUtilities.getWindowAncestor(textPane);
+        if (ancestor == null) {
+            String format = "No se pudo obtener la ventana contenedora del componente: %s";
+            String value = textPane.getName() == null ? textPane.getClass().getSimpleName() : textPane.getName();
+            throw new RuntimeException(String.format(format, value));
+        }
     }
 
     @Override
