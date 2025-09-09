@@ -14,15 +14,18 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
 
     private final InfoTextPane textPane;
     private final Window ancestor;
+    private final CountdownTimer timer;
 
     public BootstrapWorker(InfoTextPane textPane) {
         this.textPane = textPane;
         ancestor = SwingUtilities.getWindowAncestor(textPane);
+        timer = new CountdownTimer(15);
         if (ancestor == null) {
             String format = "No se pudo obtener la ventana contenedora del componente: %s";
             String value = textPane.getName() == null ? textPane.getClass().getSimpleName() : textPane.getName();
             throw new RuntimeException(String.format(format, value));
         }
+        timer.addPropertyChangeListener("finish", _ -> ancestor.dispose());
     }
 
     @Override
@@ -52,6 +55,7 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
         } catch (Exception e) {
             e.printStackTrace(System.err);
             publishError(e);
+            timer.start();
         }
     }
 
@@ -62,6 +66,9 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
                 message = t.getMessage();
             }
         }
+        if (!message.endsWith(System.lineSeparator())) {
+            message = message.concat(System.lineSeparator());
+        }
         return message;
     }
 
@@ -70,6 +77,9 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
     }
 
     public void stop() {
+        if (timer.isRunning()) {
+            timer.stop();
+        }
         if (!isDone()) {
             cancel(true);
         }
