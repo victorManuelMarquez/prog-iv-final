@@ -5,6 +5,7 @@ import ar.com.baden.gui.task.LoadAvailableFontFamilyNames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,6 +31,12 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
 
     @Override
     protected MainFrame doInBackground() throws Exception {
+        PropertyChangeListener[] progressListeners;
+        progressListeners = getPropertyChangeSupport().getPropertyChangeListeners("progress");
+        for (PropertyChangeListener listener : progressListeners) {
+            timer.addPropertyChangeListener("progress", listener);
+        }
+        firePropertyChange("indeterminate", false, true);
         ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try (ExecutorService service = Executors.newSingleThreadExecutor()) {
             LoadAvailableFontFamilyNames task = new LoadAvailableFontFamilyNames();
@@ -48,6 +55,7 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
     @Override
     protected void done() {
         try {
+            firePropertyChange("indeterminate", true, false);
             ancestor.setCursor(Cursor.getDefaultCursor());
             MainFrame mainFrame = get();
             ancestor.dispose();

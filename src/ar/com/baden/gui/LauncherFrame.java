@@ -16,9 +16,11 @@ public class LauncherFrame extends JFrame implements IScreenSizeDimension {
         textPane.setEditable(false);
         textPane.setFocusable(false);
         textPane.getCaret().setVisible(false);
+        JProgressBar progressBar = new JProgressBar();
 
         // instalando componentes
         getContentPane().add(new JScrollPane(textPane));
+        getContentPane().add(progressBar, BorderLayout.SOUTH);
 
         // ajustes
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -36,6 +38,13 @@ public class LauncherFrame extends JFrame implements IScreenSizeDimension {
 
             @Override
             public void windowOpened(WindowEvent e) {
+                worker.addPropertyChangeListener(evt -> {
+                    if ("progress".equals(evt.getPropertyName()) && evt.getNewValue() instanceof Integer progress) {
+                        progressBar.setValue(progress);
+                    } else if ("indeterminate".equals(evt.getPropertyName()) && evt.getNewValue() instanceof Boolean active) {
+                        progressBar.setIndeterminate(active);
+                    }
+                });
                 worker.execute();
             }
 
