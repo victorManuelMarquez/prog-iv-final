@@ -31,10 +31,9 @@ public class BootstrapWorker extends SwingWorker<MainFrame, String> {
 
     @Override
     protected MainFrame doInBackground() throws Exception {
-        PropertyChangeListener[] progressListeners;
-        progressListeners = getPropertyChangeSupport().getPropertyChangeListeners("progress");
-        for (PropertyChangeListener listener : progressListeners) {
-            timer.addPropertyChangeListener("progress", listener);
+        PropertyChangeListener[] propertyChangeListeners = getPropertyChangeSupport().getPropertyChangeListeners();
+        for (PropertyChangeListener listener : propertyChangeListeners) {
+            timer.addPropertyChangeListener(listener);
         }
         firePropertyChange("indeterminate", false, true);
         ancestor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

@@ -27,8 +27,10 @@ public class CountdownTimer implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         int old = calculateProgress(countdown);
+        int oldCountdown = countdown;
         countdown--;
         support.firePropertyChange("progress", old, calculateProgress(countdown));
+        support.firePropertyChange("countdown", oldCountdown, countdown);
         if (countdown == 0) {
             timer.stop();
             support.firePropertyChange("finish", false, true);
@@ -37,6 +39,10 @@ public class CountdownTimer implements ActionListener {
 
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         support.addPropertyChangeListener(propertyName, listener);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
 
     public void start() {
