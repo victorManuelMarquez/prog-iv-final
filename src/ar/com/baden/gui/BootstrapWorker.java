@@ -1,7 +1,7 @@
 package ar.com.baden.gui;
 
 import ar.com.baden.gui.component.InfoTextPane;
-import ar.com.baden.gui.task.LoadAvailableFontFamilyNames;
+import ar.com.baden.task.LoadAvailableFontFamilyNames;
 
 import javax.swing.*;
 import java.awt.*;

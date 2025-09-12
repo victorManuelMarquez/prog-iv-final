@@ -1,4 +1,4 @@
-package ar.com.baden.gui.task;
+package ar.com.baden.task;
 
 import ar.com.baden.main.App;
 
