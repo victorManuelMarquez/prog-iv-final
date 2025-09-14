@@ -1,8 +1,12 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.main.App;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame implements IScreenSizeDimension {
 
@@ -17,8 +21,28 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
         getJMenuBar().add(fileMenu);
 
         // ajustes
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
+
+        // eventos
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String showValue = App.properties.getProperty("settings.showClosingDialog");
+                if (Boolean.parseBoolean(showValue)) {
+                    Window window = e.getWindow();
+                    String message = "¿Está seguro de abandonar el programa?";
+                    String titleStr = "Atención";
+                    int optionType = JOptionPane.OK_CANCEL_OPTION;
+                    int response = JOptionPane.showConfirmDialog(window, message, titleStr, optionType);
+                    if (response == JOptionPane.OK_OPTION) {
+                        dispose();
+                    }
+                } else {
+                    dispose();
+                }
+            }
+        });
     }
 
     @Override
