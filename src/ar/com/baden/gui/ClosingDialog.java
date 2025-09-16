@@ -19,6 +19,8 @@ public class ClosingDialog extends ModalDialog {
         // componentes
         JLabel iconLabel = new JLabel(UIManager.getIcon("OptionPane.questionIcon"));
         JLabel messageLabel = new JLabel("¿Está seguro de abandonar el programa?");
+        JCheckBox confirmExit = new JCheckBox("No preguntar de nuevo");
+        confirmExit.setMnemonic(KeyEvent.VK_N);
         JButton exitBtn = new JButton("Salir");
         exitBtn.setMnemonic(KeyEvent.VK_S);
         JButton cancelBtn = new JButton("Cancelar");
@@ -29,6 +31,7 @@ public class ClosingDialog extends ModalDialog {
                 .addComponent(iconLabel)
                 .addGroup(groupLayout.createParallelGroup()
                         .addComponent(messageLabel)
+                        .addComponent(confirmExit)
                         .addGroup(groupLayout.createSequentialGroup()
                                 .addPreferredGap(unrelated, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
                                 .addComponent(exitBtn)))
@@ -39,6 +42,7 @@ public class ClosingDialog extends ModalDialog {
                 .addGroup(groupLayout.createParallelGroup()
                         .addComponent(iconLabel)
                         .addComponent(messageLabel))
+                .addComponent(confirmExit)
                 .addGroup(groupLayout.createParallelGroup()
                         .addComponent(exitBtn)
                         .addComponent(cancelBtn)));
@@ -48,6 +52,7 @@ public class ClosingDialog extends ModalDialog {
         getRootPane().setDefaultButton(exitBtn);
 
         // eventos
+        SwingUtilities.invokeLater(confirmExit::requestFocusInWindow);
         exitBtn.addActionListener(_ -> {
             response = JOptionPane.OK_OPTION;
             dispose();
