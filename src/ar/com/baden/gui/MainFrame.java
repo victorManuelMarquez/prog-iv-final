@@ -30,11 +30,7 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
             public void windowClosing(WindowEvent e) {
                 String showValue = App.properties.getProperty("settings.showClosingDialog");
                 if (Boolean.parseBoolean(showValue)) {
-                    Window window = e.getWindow();
-                    String message = "¿Está seguro de abandonar el programa?";
-                    String titleStr = "Atención";
-                    int optionType = JOptionPane.OK_CANCEL_OPTION;
-                    int response = JOptionPane.showConfirmDialog(window, message, titleStr, optionType);
+                    int response = ClosingDialog.createAndShow(e.getWindow());
                     if (response == JOptionPane.OK_OPTION) {
                         dispose();
                     }
