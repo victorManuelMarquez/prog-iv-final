@@ -1,5 +1,7 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.main.App;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -53,6 +55,10 @@ public class ClosingDialog extends ModalDialog {
 
         // eventos
         SwingUtilities.invokeLater(confirmExit::requestFocusInWindow);
+        confirmExit.addActionListener(_ -> {
+            boolean showClosingDialog = !confirmExit.isSelected();
+            App.properties.setProperty("settings.showClosingDialog", String.valueOf(showClosingDialog));
+        });
         exitBtn.addActionListener(_ -> {
             response = JOptionPane.OK_OPTION;
             dispose();
