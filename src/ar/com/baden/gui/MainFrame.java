@@ -12,12 +12,19 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
 
     public MainFrame(String title) throws HeadlessException {
         super(title);
+        // variables
+        int ctrlAlt = KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK;
+
         // componentes
         setJMenuBar(new JMenuBar());
         JMenu fileMenu = new JMenu("Archivo");
         fileMenu.setMnemonic(KeyEvent.VK_A);
+        JMenuItem settingsItem = new JMenuItem("Configuración");
+        settingsItem.setMnemonic(KeyEvent.VK_C);
+        settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ctrlAlt));
 
         // instalando componentes
+        fileMenu.add(settingsItem);
         getJMenuBar().add(fileMenu);
 
         // ajustes
@@ -39,6 +46,7 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
                 }
             }
         });
+        settingsItem.addActionListener(_ -> SettingsDialog.createAndShow(this));
     }
 
     @Override
