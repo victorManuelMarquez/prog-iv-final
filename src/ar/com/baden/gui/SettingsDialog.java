@@ -23,6 +23,7 @@ public class SettingsDialog extends ModalDialog {
         JButton cancelBtn = new JButton("Cancelar");
         cancelBtn.setMnemonic(KeyEvent.VK_C);
         JButton applyBtn = new JButton("Aplicar");
+        applyBtn.setEnabled(false);
         applyBtn.setMnemonic(KeyEvent.VK_A);
 
         // instalando componentes
@@ -48,6 +49,9 @@ public class SettingsDialog extends ModalDialog {
 
         // eventos
         SwingUtilities.invokeLater(okBtn::requestFocusInWindow);
+        okBtn.addActionListener(_ -> dispose());
+        cancelBtn.addActionListener(_ -> dispose());
+        applyBtn.addActionListener(_ -> dispose());
     }
 
     public static void createAndShow(Window owner) {
