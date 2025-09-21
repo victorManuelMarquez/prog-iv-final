@@ -9,14 +9,21 @@ public class GeneralContent extends ContentPanel {
     public GeneralContent(String title) {
         super(title);
         // variables
-        String showDialog = App.properties.getProperty("settings.showClosingDialog");
+        String showClosingDialogKey = "settings.showClosingDialog";
+        String showDialogValue = App.properties.getProperty(showClosingDialogKey);
 
         // componentes
         JCheckBox showClosingDialogBtn = new JCheckBox("Confirmar para salir");
-        showClosingDialogBtn.setSelected(Boolean.parseBoolean(showDialog));
+        showClosingDialogBtn.setSelected(Boolean.parseBoolean(showDialogValue));
 
         // instalando componentes
         add(showClosingDialogBtn);
+
+        // eventos
+        showClosingDialogBtn.addActionListener(_ -> {
+            boolean selected = showClosingDialogBtn.isSelected();
+            App.properties.setProperty(showClosingDialogKey, String.valueOf(selected));
+        });
     }
 
 }

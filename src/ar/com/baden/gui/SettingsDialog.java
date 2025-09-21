@@ -1,10 +1,14 @@
 package ar.com.baden.gui;
 
 import ar.com.baden.gui.component.GeneralContent;
+import ar.com.baden.main.App;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
 
 public class SettingsDialog extends ModalDialog {
 
@@ -23,7 +27,7 @@ public class SettingsDialog extends ModalDialog {
         JButton cancelBtn = new JButton("Cancelar");
         cancelBtn.setMnemonic(KeyEvent.VK_C);
         JButton applyBtn = new JButton("Aplicar");
-        applyBtn.setEnabled(false);
+        applyBtn.setEnabled(App.properties.hasChanges());
         applyBtn.setMnemonic(KeyEvent.VK_A);
 
         // instalando componentes
@@ -49,9 +53,35 @@ public class SettingsDialog extends ModalDialog {
 
         // eventos
         SwingUtilities.invokeLater(okBtn::requestFocusInWindow);
-        okBtn.addActionListener(_ -> dispose());
-        cancelBtn.addActionListener(_ -> dispose());
-        applyBtn.addActionListener(_ -> dispose());
+        PropertyChangeListener restoreListener = evt -> {
+            if ("restore".equals(evt.getPropertyName())) {
+                applyBtn.setEnabled(App.properties.hasChanges());
+            }
+        };
+        App.properties.addPropertyChangeListener(restoreListener);
+        PropertyChangeListener changeListener = _ -> applyBtn.setEnabled(true);
+        PropertyChangeListener applyListener = _ -> applyBtn.setEnabled(false);
+        App.properties.addPropertyChangeListener("change", changeListener);
+        App.properties.addPropertyChangeListener("changesApplied", applyListener);
+        okBtn.addActionListener(_ -> {
+            if (App.properties.hasChanges()) {
+                App.properties.applyChanges();
+            }
+            dispose();
+        });
+        cancelBtn.addActionListener(_ -> {
+            App.properties.clearChanges();
+            dispose();
+        });
+        applyBtn.addActionListener(_ -> App.properties.applyChanges());
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                App.properties.removePropertyChangeListener(restoreListener);
+                App.properties.removePropertyChangeListener("change", changeListener);
+                App.properties.removePropertyChangeListener("changesApplied", applyListener);
+            }
+        });
     }
 
     public static void createAndShow(Window owner) {
