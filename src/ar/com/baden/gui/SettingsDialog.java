@@ -18,10 +18,13 @@ public class SettingsDialog extends ModalDialog {
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
+        LayoutStyle.ComponentPlacement unrelated = LayoutStyle.ComponentPlacement.UNRELATED;
 
         // componentes
         GeneralContent generalContent = new GeneralContent("General");
         JSeparator horizontalSeparator = new JSeparator(JSeparator.HORIZONTAL);
+        JButton resetBtn = new JButton("Restablecer");
+        resetBtn.setMnemonic(KeyEvent.VK_R);
         JButton okBtn = new JButton("Ok");
         okBtn.setMnemonic(KeyEvent.VK_O);
         JButton cancelBtn = new JButton("Cancelar");
@@ -35,6 +38,8 @@ public class SettingsDialog extends ModalDialog {
                 .addComponent(generalContent)
                 .addComponent(horizontalSeparator)
                 .addGroup(groupLayout.createSequentialGroup()
+                        .addComponent(resetBtn)
+                        .addPreferredGap(unrelated, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
                         .addComponent(okBtn)
                         .addComponent(cancelBtn)
                         .addComponent(applyBtn)));
@@ -43,6 +48,7 @@ public class SettingsDialog extends ModalDialog {
                 .addComponent(generalContent)
                 .addComponent(horizontalSeparator)
                 .addGroup(groupLayout.createParallelGroup()
+                        .addComponent(resetBtn)
                         .addComponent(okBtn)
                         .addComponent(cancelBtn)
                         .addComponent(applyBtn)));
@@ -53,16 +59,18 @@ public class SettingsDialog extends ModalDialog {
 
         // eventos
         SwingUtilities.invokeLater(okBtn::requestFocusInWindow);
+
         PropertyChangeListener restoreListener = evt -> {
             if ("restore".equals(evt.getPropertyName())) {
                 applyBtn.setEnabled(App.properties.hasChanges());
             }
         };
-        App.properties.addPropertyChangeListener(restoreListener);
         PropertyChangeListener changeListener = _ -> applyBtn.setEnabled(true);
         PropertyChangeListener applyListener = _ -> applyBtn.setEnabled(false);
+        App.properties.addPropertyChangeListener(restoreListener);
         App.properties.addPropertyChangeListener("change", changeListener);
         App.properties.addPropertyChangeListener("changesApplied", applyListener);
+
         okBtn.addActionListener(_ -> {
             if (App.properties.hasChanges()) {
                 App.properties.applyChanges();
