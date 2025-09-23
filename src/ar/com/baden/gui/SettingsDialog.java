@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
 
 public class SettingsDialog extends ModalDialog {
 
@@ -60,17 +61,15 @@ public class SettingsDialog extends ModalDialog {
         // eventos
         SwingUtilities.invokeLater(okBtn::requestFocusInWindow);
 
-        PropertyChangeListener restoreListener = evt -> {
-            if ("restore".equals(evt.getPropertyName())) {
-                applyBtn.setEnabled(App.properties.hasChanges());
-            }
-        };
-        PropertyChangeListener changeListener = _ -> applyBtn.setEnabled(true);
-        PropertyChangeListener applyListener = _ -> applyBtn.setEnabled(false);
-        App.properties.addPropertyChangeListener(restoreListener);
-        App.properties.addPropertyChangeListener("change", changeListener);
-        App.properties.addPropertyChangeListener("changesApplied", applyListener);
+        App.properties.addPropertyChangeListener(evt -> {
+            boolean condition1 = "restore".equals(evt.getPropertyName());
+            boolean condition2 = "resetToDefaults".equals(evt.getPropertyName());
+            applyBtn.setEnabled(App.properties.hasChanges() && (condition1 || condition2));
+        });
+        App.properties.addPropertyChangeListener("change", _ -> applyBtn.setEnabled(true));
+        App.properties.addPropertyChangeListener("changesApplied", _ -> applyBtn.setEnabled(false));
 
+        resetBtn.addActionListener(_ -> App.properties.resetValues());
         okBtn.addActionListener(_ -> {
             if (App.properties.hasChanges()) {
                 App.properties.applyChanges();
@@ -85,9 +84,14 @@ public class SettingsDialog extends ModalDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                App.properties.removePropertyChangeListener(restoreListener);
-                App.properties.removePropertyChangeListener("change", changeListener);
-                App.properties.removePropertyChangeListener("changesApplied", applyListener);
+                PropertyChangeListener[] listeners = App.properties.getPropertyChangeListeners();
+                for (PropertyChangeListener listener : listeners) {
+                    if (listener instanceof PropertyChangeListenerProxy proxy) {
+                        App.properties.removePropertyChangeListener(proxy.getPropertyName(), listener);
+                    } else {
+                        App.properties.removePropertyChangeListener(listener);
+                    }
+                }
             }
         });
     }

@@ -83,6 +83,10 @@ public class AppProperties extends Properties {
         propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
     }
 
+    public PropertyChangeListener[] getPropertyChangeListeners() {
+        return propertyChangeSupport.getPropertyChangeListeners();
+    }
+
     public void applyChanges() {
         if (!buffer.isEmpty()) {
             super.putAll(buffer);
@@ -98,6 +102,12 @@ public class AppProperties extends Properties {
 
     public boolean hasChanges() {
         return !buffer.isEmpty();
+    }
+
+    public void resetValues() {
+        buffer.putAll(this);
+        super.putAll(defaults);
+        propertyChangeSupport.firePropertyChange("resetToDefaults", false, true);
     }
 
 }

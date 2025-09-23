@@ -20,6 +20,11 @@ public class GeneralContent extends ContentPanel {
         add(showClosingDialogBtn);
 
         // eventos
+        App.properties.addPropertyChangeListener("resetToDefaults", _ -> {
+            System.out.println("reset");
+            String value = App.properties.getProperty(showClosingDialogKey);
+            showClosingDialogBtn.setSelected(Boolean.parseBoolean(value));
+        });
         showClosingDialogBtn.addActionListener(_ -> {
             boolean selected = showClosingDialogBtn.isSelected();
             App.properties.setProperty(showClosingDialogKey, String.valueOf(selected));
