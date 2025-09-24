@@ -59,4 +59,8 @@ public class ContentPanel extends JPanel {
         return panel;
     }
 
+    public JPanel getMainContentPane() {
+        return mainContentPane;
+    }
+
 }
