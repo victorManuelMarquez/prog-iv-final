@@ -23,6 +23,9 @@ public class AppProperties extends Properties {
     }
 
     @Override
+    public synchronized void putAll(Map<?, ?> t) {}
+
+    @Override
     public synchronized Object put(Object key, Object value) {
         if (containsKey(key)) {
             boolean equals = getProperty(key.toString()).equals(value);
