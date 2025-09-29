@@ -4,6 +4,8 @@ import ar.com.baden.gui.component.LookAndFeelInfoRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class SettingsDialog extends JDialog {
 
@@ -19,24 +21,39 @@ public class SettingsDialog extends JDialog {
             }
         }
         LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+        CardLayout cardLayout = new CardLayout();
 
         // componentes
         JPanel themePanel = new JPanel();
         JComboBox<UIManager.LookAndFeelInfo> lafCombo = new JComboBox<>(lafModel);
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
+        JPanel cardsPanel = new JPanel(cardLayout);
         JCheckBox lafDecorated = new JCheckBox("Decoración nativa");
         lafDecorated.setSelected(JDialog.isDefaultLookAndFeelDecorated()&&JFrame.isDefaultLookAndFeelDecorated());
 
         // instalando componentes
         themePanel.add(new JLabel("Tema"));
         themePanel.add(lafCombo);
-        themePanel.add(lafDecorated);
+        for (UIManager.LookAndFeelInfo info : installed) {
+            if ("Metal".equals(info.getName())) {
+                cardsPanel.add(lafDecorated, info.getClassName());
+            } else {
+                cardsPanel.add(new JLabel(), info.getClassName());
+            }
+        }
+        themePanel.add(cardsPanel);
         getContentPane().add(themePanel);
 
         // ajustes
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // eventos
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                cardLayout.show(cardsPanel, lookAndFeel.getClass().getName());
+            }
+        });
         lafCombo.addActionListener(_ -> {
             Object selection = lafCombo.getSelectedItem();
             if (selection instanceof UIManager.LookAndFeelInfo info) {
@@ -46,6 +63,7 @@ public class SettingsDialog extends JDialog {
                 try {
                     UIManager.setLookAndFeel(info.getClassName());
                     updateTheme(UIManager.getLookAndFeel());
+                    cardLayout.show(cardsPanel, info.getName());
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
                 }
