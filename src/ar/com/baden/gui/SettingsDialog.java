@@ -3,9 +3,11 @@ package ar.com.baden.gui;
 import ar.com.baden.gui.component.LookAndFeelInfoRenderer;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+import javax.swing.plaf.metal.OceanTheme;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class SettingsDialog extends JDialog {
 
@@ -22,38 +24,44 @@ public class SettingsDialog extends JDialog {
         }
         LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
         CardLayout cardLayout = new CardLayout();
+        MetalTheme currentTheme = MetalLookAndFeel.getCurrentTheme();
+        OceanTheme oceanTheme = new OceanTheme();
+        DefaultMetalTheme steelTheme = new DefaultMetalTheme();
 
         // componentes
         JPanel themePanel = new JPanel();
         JComboBox<UIManager.LookAndFeelInfo> lafCombo = new JComboBox<>(lafModel);
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
         JPanel cardsPanel = new JPanel(cardLayout);
-        JCheckBox lafDecorated = new JCheckBox("Decoración nativa");
+        JPanel metalPanel = new JPanel();
+        JCheckBox lafDecorated = new JCheckBox("Aplicar a ventanas");
         lafDecorated.setSelected(JDialog.isDefaultLookAndFeelDecorated()&&JFrame.isDefaultLookAndFeelDecorated());
+        JComboBox<String> themeCombo = new JComboBox<>();
+        themeCombo.addItem(oceanTheme.getName());
+        themeCombo.addItem(steelTheme.getName());
+        themeCombo.setSelectedItem(currentTheme.getName());
 
         // instalando componentes
         themePanel.add(new JLabel("Tema"));
         themePanel.add(lafCombo);
+        metalPanel.add(lafDecorated);
+        metalPanel.add(new JLabel("Estilo"));
+        metalPanel.add(themeCombo);
         for (UIManager.LookAndFeelInfo info : installed) {
             if ("Metal".equals(info.getName())) {
-                cardsPanel.add(lafDecorated, info.getClassName());
+                cardsPanel.add(metalPanel, info.getClassName());
             } else {
                 cardsPanel.add(new JLabel(), info.getClassName());
             }
         }
         themePanel.add(cardsPanel);
+        cardLayout.show(cardsPanel, lookAndFeel.getClass().getName());
         getContentPane().add(themePanel);
 
         // ajustes
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // eventos
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                cardLayout.show(cardsPanel, lookAndFeel.getClass().getName());
-            }
-        });
         lafCombo.addActionListener(_ -> {
             Object selection = lafCombo.getSelectedItem();
             if (selection instanceof UIManager.LookAndFeelInfo info) {
@@ -74,6 +82,22 @@ public class SettingsDialog extends JDialog {
                 JDialog.setDefaultLookAndFeelDecorated(lafDecorated.isSelected());
                 JFrame.setDefaultLookAndFeelDecorated(lafDecorated.isSelected());
                 updateTheme(lookAndFeel);
+            }
+        });
+        themeCombo.addActionListener(_ -> {
+            String themeSelected = (String) themeCombo.getSelectedItem();
+            if (currentTheme.getName().equals(themeSelected)) {
+                return;
+            }
+            if (themeSelected != null) {
+                MetalLookAndFeel.setCurrentTheme(oceanTheme.getName().equals(themeSelected) ? oceanTheme : steelTheme);
+                try {
+                    MetalLookAndFeel newLookAndFeel = new MetalLookAndFeel();
+                    UIManager.setLookAndFeel(newLookAndFeel);
+                    updateTheme(newLookAndFeel);
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                }
             }
         });
     }
