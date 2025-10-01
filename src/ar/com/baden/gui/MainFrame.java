@@ -17,10 +17,14 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
         JMenuItem settingsItem = new JMenuItem("Configuración");
         settingsItem.setMnemonic(KeyEvent.VK_C);
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CTRL_DOWN_MASK|ALT_DOWN_MASK));
+        JMenuItem exitItem = new JMenuItem("Salir");
+        exitItem.setMnemonic(KeyEvent.VK_S);
 
         // instalando componentes
         setJMenuBar(new JMenuBar());
         fileMenu.add(settingsItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
         getJMenuBar().add(fileMenu);
 
         // ajustes
@@ -29,6 +33,7 @@ public class MainFrame extends JFrame implements IScreenSizeDimension {
 
         // eventos
         settingsItem.addActionListener(_ -> SettingsDialog.createAndShow(this));
+        exitItem.addActionListener(_ -> dispose());
     }
 
     @Override
