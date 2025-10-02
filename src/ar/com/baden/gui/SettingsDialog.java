@@ -27,6 +27,8 @@ public class SettingsDialog extends JDialog {
         MetalTheme currentTheme = MetalLookAndFeel.getCurrentTheme();
         OceanTheme oceanTheme = new OceanTheme();
         DefaultMetalTheme steelTheme = new DefaultMetalTheme();
+        String swingBoldMetalKey = "swing.boldMetal";
+        Object swingBoldValue = UIManager.get(swingBoldMetalKey);
 
         // componentes
         JPanel themePanel = new JPanel();
@@ -34,6 +36,8 @@ public class SettingsDialog extends JDialog {
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
         JPanel cardsPanel = new JPanel(cardLayout);
         JPanel metalPanel = new JPanel();
+        JCheckBox swingBold = new JCheckBox("Negrita");
+        swingBold.setSelected(swingBoldValue == null || Boolean.parseBoolean(swingBoldValue.toString()));
         JCheckBox lafDecorated = new JCheckBox("Aplicar a ventanas");
         lafDecorated.setSelected(JDialog.isDefaultLookAndFeelDecorated()&&JFrame.isDefaultLookAndFeelDecorated());
         JComboBox<String> themeCombo = new JComboBox<>();
@@ -44,6 +48,7 @@ public class SettingsDialog extends JDialog {
         // instalando componentes
         themePanel.add(new JLabel("Tema"));
         themePanel.add(lafCombo);
+        metalPanel.add(swingBold);
         metalPanel.add(lafDecorated);
         metalPanel.add(new JLabel("Estilo"));
         metalPanel.add(themeCombo);
@@ -75,6 +80,17 @@ public class SettingsDialog extends JDialog {
                 } catch (Exception e) {
                     e.printStackTrace(System.err);
                 }
+            }
+        });
+        swingBold.addActionListener(_ -> {
+            try {
+                UIManager.put(swingBoldMetalKey, swingBold.isSelected());
+                MetalLookAndFeel metalLookAndFeel = new MetalLookAndFeel();
+                UIManager.setLookAndFeel(metalLookAndFeel);
+                SwingUtilities.updateComponentTreeUI(getOwner());
+                SwingUtilities.updateComponentTreeUI(getRootPane());
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
             }
         });
         lafDecorated.addActionListener(_ -> {
