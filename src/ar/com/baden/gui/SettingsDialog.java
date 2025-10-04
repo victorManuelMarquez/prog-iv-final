@@ -89,6 +89,7 @@ public class SettingsDialog extends JDialog {
                 UIManager.setLookAndFeel(metalLookAndFeel);
                 SwingUtilities.updateComponentTreeUI(getOwner());
                 SwingUtilities.updateComponentTreeUI(getRootPane());
+                pack();
             } catch (Exception e) {
                 e.printStackTrace(System.err);
             }
