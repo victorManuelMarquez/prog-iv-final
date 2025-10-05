@@ -1,8 +1,12 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.gui.component.ClosingDialog;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static java.awt.event.KeyEvent.CTRL_DOWN_MASK;
 import static java.awt.event.KeyEvent.ALT_DOWN_MASK;
@@ -29,11 +33,17 @@ public class MainFrame extends JFrame {
 
         // ajustes
         setExtendedState(MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         // eventos
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                showClosingDialog();
+            }
+        });
         settingsItem.addActionListener(_ -> SettingsDialog.createAndShow(this));
-        exitItem.addActionListener(_ -> dispose());
+        exitItem.addActionListener(_ -> showClosingDialog());
     }
 
     @Override
@@ -42,6 +52,13 @@ public class MainFrame extends JFrame {
         int width = (int) Math.ceil(mainScreen.width * .75f);
         int height = (int) Math.ceil(mainScreen.height * .75f);
         setSize(new Dimension(width, height));
+    }
+
+    private void showClosingDialog() {
+        int response = ClosingDialog.createAndShow(this);
+        if (response == JOptionPane.OK_OPTION) {
+            dispose();
+        }
     }
 
     public void displayOnScreen() {
