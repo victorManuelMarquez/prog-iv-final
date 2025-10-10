@@ -1,5 +1,7 @@
 package ar.com.baden.gui.component;
 
+import ar.com.baden.utils.UserPreferences;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -22,15 +24,15 @@ public class ThemesPanel extends JPanel {
         for (UIManager.LookAndFeelInfo info : installed) {
             lafComboModel.addElement(info);
             LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-            String infoClassName = info.getClassName();
+            String className = info.getClassName();
             if ("Metal".equals(info.getName())) {
-                toolsPanel.add(new MetalThemePanel(), infoClassName);
+                toolsPanel.add(new MetalThemePanel(), className);
             } else {
-                toolsPanel.add(new JLabel(), infoClassName);
+                toolsPanel.add(new JLabel(), className);
             }
-            if (lookAndFeel.getClass().getName().equals(infoClassName)) {
+            if (lookAndFeel.getClass().getName().equals(className)) {
                 lafComboModel.setSelectedItem(info);
-                cardLayout.show(toolsPanel, infoClassName);
+                cardLayout.show(toolsPanel, className);
             }
         }
 
@@ -44,10 +46,12 @@ public class ThemesPanel extends JPanel {
             if (evt.getStateChange() == ItemEvent.SELECTED) {
                 if (evt.getItem() instanceof UIManager.LookAndFeelInfo info) {
                     try {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        cardLayout.show(toolsPanel, info.getClassName());
+                        String className = info.getClassName();
+                        UIManager.setLookAndFeel(className);
+                        cardLayout.show(toolsPanel, className);
                         Window window = SwingUtilities.windowForComponent(getRootPane());
                         updateGUI(window, UIManager.getLookAndFeel().getSupportsWindowDecorations());
+                        UserPreferences.saveUserTheme(className);
                     } catch (Exception e) {
                         e.printStackTrace(System.err);
                     }
