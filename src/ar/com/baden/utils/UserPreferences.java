@@ -7,8 +7,8 @@ import java.util.prefs.Preferences;
 public class UserPreferences {
 
     private static final Preferences PREFERENCES = Preferences.userNodeForPackage(UserPreferences.class);
-    public static final String LAF_KEY = "lookAndFeel";
-    public static final String DEFAULT_LAF = UIManager.getCrossPlatformLookAndFeelClassName();
+    private static final String LAF_KEY = "lookAndFeel";
+    private static final String CONFIRM_EXIT = "showClosingDialog";
 
     public static void saveUserTheme(String className) throws BackingStoreException {
         PREFERENCES.put(LAF_KEY, className);
@@ -16,7 +16,16 @@ public class UserPreferences {
     }
 
     public static String getUserTheme() {
-        return PREFERENCES.get(LAF_KEY, DEFAULT_LAF);
+        return PREFERENCES.get(LAF_KEY, UIManager.getCrossPlatformLookAndFeelClassName());
+    }
+
+    public static void saveConfirmToExit(boolean status) throws BackingStoreException {
+        PREFERENCES.putBoolean(CONFIRM_EXIT, status);
+        PREFERENCES.flush();
+    }
+
+    public static boolean getConfirmToExit() {
+        return PREFERENCES.getBoolean(CONFIRM_EXIT, true);
     }
 
 }

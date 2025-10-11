@@ -1,7 +1,10 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.utils.UserPreferences;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.prefs.BackingStoreException;
 
 public class ClosingDialog extends JDialog {
 
@@ -19,6 +22,7 @@ public class ClosingDialog extends JDialog {
         JLabel iconLabel = new JLabel(UIManager.getIcon("OptionPane.questionIcon"));
         JLabel messageLabel = new JLabel("¿Está seguro que desea abandonar el programa?");
         JCheckBox confirmExitBtn = new JCheckBox("No preguntar nuevamente");
+        confirmExitBtn.setSelected(!UserPreferences.getConfirmToExit());
         JButton exitBtn = new JButton("Salir");
         JButton cancelBtn = new JButton("Cancel");
 
@@ -49,6 +53,14 @@ public class ClosingDialog extends JDialog {
 
         // eventos
         SwingUtilities.invokeLater(exitBtn::requestFocusInWindow);
+        confirmExitBtn.addActionListener(_ -> {
+            boolean status = !confirmExitBtn.isSelected();
+            try {
+                UserPreferences.saveConfirmToExit(status);
+            } catch (BackingStoreException e) {
+                e.printStackTrace(System.err);
+            }
+        });
         exitBtn.addActionListener(_ -> {
             response = JOptionPane.OK_OPTION;
             dispose();

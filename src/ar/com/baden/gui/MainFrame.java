@@ -1,5 +1,7 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.utils.UserPreferences;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -47,8 +49,12 @@ public class MainFrame extends JFrame {
     }
 
     private void showClosingDialog() {
-        int response = ClosingDialog.createAndShow(this);
-        if (response == JOptionPane.OK_OPTION) {
+        if (UserPreferences.getConfirmToExit()) {
+            int response = ClosingDialog.createAndShow(this);
+            if (response == JOptionPane.OK_OPTION) {
+                dispose();
+            }
+        } else {
             dispose();
         }
     }
