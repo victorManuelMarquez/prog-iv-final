@@ -1,5 +1,6 @@
 package ar.com.baden.gui;
 
+import ar.com.baden.gui.component.GeneralPanel;
 import ar.com.baden.gui.component.ThemesPanel;
 import ar.com.baden.main.App;
 
@@ -15,11 +16,15 @@ public class SettingsDialog extends JDialog {
     private SettingsDialog(Frame owner, String title) {
         super(owner, title, ModalityType.APPLICATION_MODAL);
         // componentes
+        Box verticalBox = Box.createVerticalBox();
+        GeneralPanel generalPanel = new GeneralPanel();
         ThemesPanel themesPanel = new ThemesPanel();
         ToolsPanel toolsPanel = new ToolsPanel();
 
         // instalando componentes
-        getContentPane().add(themesPanel);
+        verticalBox.add(generalPanel);
+        verticalBox.add(themesPanel);
+        getContentPane().add(verticalBox);
         getContentPane().add(toolsPanel, BorderLayout.SOUTH);
 
         // eventos
