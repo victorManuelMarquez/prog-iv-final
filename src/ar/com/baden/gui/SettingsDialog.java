@@ -6,10 +6,9 @@ import ar.com.baden.main.App;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeListenerProxy;
 
 public class SettingsDialog extends JDialog {
 
@@ -28,16 +27,15 @@ public class SettingsDialog extends JDialog {
         getContentPane().add(toolsPanel, BorderLayout.SOUTH);
 
         // eventos
-        addWindowListener(new WindowAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
-                for (PropertyChangeListener listener : App.settings.getPropertyChangeListeners()) {
-                    if (listener instanceof PropertyChangeListenerProxy proxy) {
-                        App.settings.removePropertyChangeListener(proxy.getPropertyName(), proxy);
-                    } else {
-                        App.settings.removePropertyChangeListener(listener);
-                    }
-                }
+            public void componentShown(ComponentEvent e) {
+                App.settings.addPropertyChangeListener(toolsPanel.getChangeListener());
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                App.settings.removePropertyChangeListener(toolsPanel.getChangeListener());
             }
         });
     }
@@ -54,6 +52,8 @@ public class SettingsDialog extends JDialog {
     }
 
     static class ToolsPanel extends JPanel {
+
+        private final PropertyChangeListener changeListener;
 
         public ToolsPanel() {
             super(null);
@@ -83,7 +83,7 @@ public class SettingsDialog extends JDialog {
             setLayout(groupLayout);
 
             // eventos
-            App.settings.addPropertyChangeListener(_ -> applyBtn.setEnabled(App.settings.hasChanges()));
+            changeListener = _ -> applyBtn.setEnabled(App.settings.hasChanges());
             okBtn.addActionListener(_ -> {
                 App.settings.applyChanges();
                 Window window = SwingUtilities.windowForComponent(this);
@@ -95,6 +95,10 @@ public class SettingsDialog extends JDialog {
                 window.dispose();
             });
             applyBtn.addActionListener(_ -> App.settings.applyChanges());
+        }
+
+        public PropertyChangeListener getChangeListener() {
+            return changeListener;
         }
 
     }

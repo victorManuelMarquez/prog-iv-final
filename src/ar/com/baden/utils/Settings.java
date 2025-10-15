@@ -47,16 +47,8 @@ public class Settings extends Properties {
         changeSupport.addPropertyChangeListener(listener);
     }
 
-    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(propertyName, listener);
-    }
-
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
-    }
-
-    public PropertyChangeListener[] getPropertyChangeListeners() {
-        return changeSupport.getPropertyChangeListeners();
     }
 
     public void applyChanges() {
