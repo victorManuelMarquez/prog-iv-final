@@ -8,7 +8,8 @@ public class GeneralPanel extends JPanel {
 
     public GeneralPanel() {
         // variables
-        String property = App.settings.getProperty("settings.confirmToExit");
+        String confirmToExitKey = "settings.confirmToExit";
+        String property = App.settings.getProperty(confirmToExitKey);
 
         // componentes
         JCheckBox confirmToExitBtn = new JCheckBox("Confirmar para salir");
@@ -20,7 +21,7 @@ public class GeneralPanel extends JPanel {
         // eventos
         confirmToExitBtn.addActionListener(_ -> {
             boolean status = confirmToExitBtn.isSelected();
-            App.settings.setProperty("setting.confirmToExit", String.valueOf(status));
+            App.settings.setProperty(confirmToExitKey, String.valueOf(status));
         });
     }
 
