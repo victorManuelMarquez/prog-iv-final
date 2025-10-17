@@ -19,11 +19,9 @@ public class Settings extends Properties {
     }
 
     private void setDefaults() {
-        if (defaults != null) {
-            String className = UIManager.getCrossPlatformLookAndFeelClassName();
-            defaults.put("settings.lookAndFeel", className);
-            defaults.put("settings.confirmToExit", String.valueOf(true));
-        }
+        String className = UIManager.getCrossPlatformLookAndFeelClassName();
+        defaults.put("settings.lookAndFeel", className);
+        defaults.put("settings.confirmToExit", String.valueOf(true));
     }
 
     @Override
@@ -60,6 +58,12 @@ public class Settings extends Properties {
     public void discardChanges() {
         buffer.clear();
         changeSupport.firePropertyChange("changesDiscarded", false, true);
+    }
+
+    public void restoreDefaults() {
+        buffer.clear();
+        buffer.putAll(defaults);
+        changeSupport.firePropertyChange("defaultsRestored", false, true);
     }
 
     public boolean hasChanges() {

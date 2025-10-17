@@ -61,8 +61,10 @@ public class SettingsDialog extends JDialog {
             GroupLayout groupLayout = new GroupLayout(this);
             groupLayout.setAutoCreateContainerGaps(true);
             groupLayout.setAutoCreateGaps(true);
+            LayoutStyle.ComponentPlacement unrelated = LayoutStyle.ComponentPlacement.UNRELATED;
 
             // componentes
+            JButton resetBtn = new JButton("Restablecer");
             JButton okBtn = new JButton("Aceptar");
             JButton cancelBtn = new JButton("Cancelar");
             JButton applyBtn = new JButton("Aplicar");
@@ -70,11 +72,14 @@ public class SettingsDialog extends JDialog {
 
             // instalando componentes
             groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
+                    .addComponent(resetBtn)
+                    .addPreferredGap(unrelated, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
                     .addComponent(okBtn)
                     .addComponent(cancelBtn)
                     .addComponent(applyBtn));
 
             groupLayout.setVerticalGroup(groupLayout.createParallelGroup()
+                    .addComponent(resetBtn)
                     .addComponent(okBtn)
                     .addComponent(cancelBtn)
                     .addComponent(applyBtn));
@@ -84,6 +89,7 @@ public class SettingsDialog extends JDialog {
 
             // eventos
             changeListener = _ -> applyBtn.setEnabled(App.settings.hasChanges());
+            resetBtn.addActionListener(_ -> App.settings.restoreDefaults());
             okBtn.addActionListener(_ -> {
                 App.settings.applyChanges();
                 Window window = SwingUtilities.windowForComponent(this);
