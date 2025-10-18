@@ -5,8 +5,12 @@ import ar.com.baden.main.App;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
 
-public class ThemesPanel extends JPanel {
+public class ThemesPanel extends SettingsPanel implements ItemListener {
+
+    private final JComboBox<UIManager.LookAndFeelInfo> lafCombo;
 
     public ThemesPanel() {
         // variables
@@ -22,7 +26,7 @@ public class ThemesPanel extends JPanel {
 
         // componentes
         JLabel lafLabel = new JLabel("Tema");
-        JComboBox<UIManager.LookAndFeelInfo> lafCombo = new JComboBox<>(lafModel);
+        lafCombo = new JComboBox<>(lafModel);
         lafCombo.setRenderer(new LookAndFeelInfoRenderer());
 
         // instalando componentes
@@ -30,13 +34,30 @@ public class ThemesPanel extends JPanel {
         add(lafCombo);
 
         // eventos
-        lafCombo.addItemListener(evt -> {
-            if (evt.getStateChange() == ItemEvent.SELECTED) {
-                if (evt.getItem() instanceof UIManager.LookAndFeelInfo info) {
-                    App.settings.setProperty("settings.lookAndFeel", info.getClassName());
+        lafCombo.addItemListener(this);
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            if (e.getItem() instanceof UIManager.LookAndFeelInfo info) {
+                App.settings.setProperty("settings.lookAndFeel", info.getClassName());
+            }
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("defaultsRestored".equals(evt.getPropertyName())) {
+            lafCombo.removeItemListener(this);
+            for (int i = 0; i < lafCombo.getItemCount(); i++) {
+                UIManager.LookAndFeelInfo info = lafCombo.getItemAt(i);
+                if (info.getClassName().equals(App.settings.getDefault("settings.lookAndFeel"))) {
+                    lafCombo.setSelectedItem(info);
                 }
             }
-        });
+            lafCombo.addItemListener(this);
+        }
     }
 
     static class LookAndFeelInfoRenderer extends DefaultListCellRenderer {

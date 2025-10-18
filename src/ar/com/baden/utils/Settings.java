@@ -66,6 +66,10 @@ public class Settings extends Properties {
         changeSupport.firePropertyChange("defaultsRestored", false, true);
     }
 
+    public String getDefault(String key) {
+        return defaults.getProperty(key);
+    }
+
     public boolean hasChanges() {
         return !buffer.isEmpty();
     }
