@@ -96,6 +96,7 @@ public class SettingsDialog extends JDialog {
             resetBtn.addActionListener(_ -> App.settings.restoreDefaults());
             okBtn.addActionListener(_ -> {
                 App.settings.applyChanges();
+                App.settings.save();
                 Window window = SwingUtilities.windowForComponent(this);
                 window.dispose();
             });

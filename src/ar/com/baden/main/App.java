@@ -11,6 +11,7 @@ public class App {
 
     static {
         settings = new Settings();
+        settings.load();
     }
 
     static void main() {

@@ -3,10 +3,13 @@ package ar.com.baden.utils;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.*;
 import java.util.Objects;
 import java.util.Properties;
 
 public class Settings extends Properties {
+
+    public static final String APP_FOLDER = ".baden";
 
     private final Properties buffer;
     private final PropertyChangeSupport changeSupport;
@@ -72,6 +75,34 @@ public class Settings extends Properties {
 
     public boolean hasChanges() {
         return !buffer.isEmpty();
+    }
+
+    public void load() {
+        String userHome = System.getProperty("user.home");
+        File appFolder = new File(userHome, APP_FOLDER);
+        File propertiesFile = new File(appFolder, "settings.properties");
+        try (FileReader reader = new FileReader(propertiesFile)) {
+            super.load(reader);
+            if (isEmpty()) {
+                super.putAll(defaults);
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public void save() {
+        String userHome = System.getProperty("user.home");
+        File appFolder = new File(userHome, APP_FOLDER);
+        if (!appFolder.exists()) {
+            boolean ignore = appFolder.mkdir();
+        }
+        File propertiesFile = new File(appFolder, "settings.properties");
+        try (FileWriter writer = new FileWriter(propertiesFile)) {
+            super.store(writer, "Archivo de configuración");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
     }
 
 }
