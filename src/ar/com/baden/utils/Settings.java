@@ -83,8 +83,10 @@ public class Settings extends Properties {
         File propertiesFile = new File(appFolder, "settings.properties");
         try (FileReader reader = new FileReader(propertiesFile)) {
             super.load(reader);
-            if (isEmpty()) {
-                super.putAll(defaults);
+            if (buffer.isEmpty()) {
+                restoreDefaults();
+            } else {
+                applyChanges();
             }
         } catch (IOException e) {
             e.printStackTrace(System.err);
