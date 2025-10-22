@@ -15,6 +15,14 @@ public class App {
     }
 
     static void main() {
+        String lafClassName = settings.getProperty("settings.lookAndFeel");
+        if (lafClassName != null) {
+            try {
+                UIManager.setLookAndFeel(lafClassName);
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame("Bienvenido");
             frame.pack();
