@@ -25,6 +25,8 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
         // variables
         cardLayout = new CardLayout();
         GroupLayout groupLayout = new GroupLayout(this);
+        groupLayout.setAutoCreateContainerGaps(true);
+        groupLayout.setAutoCreateGaps(true);
         LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
         UIManager.LookAndFeelInfo[] installedLaf = UIManager.getInstalledLookAndFeels();
         DefaultComboBoxModel<UIManager.LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
@@ -57,7 +59,7 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
                 .addComponent(cardPanel));
 
         groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-                .addGroup(groupLayout.createParallelGroup()
+                .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(lafLabel)
                         .addComponent(lafCombo))
                 .addComponent(cardPanel));
