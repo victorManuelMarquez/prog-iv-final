@@ -117,19 +117,35 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             // variables
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(5, 5, 5, 5);
+            int row = 0;
+
+            // componentes
             JComboBox<MetalTheme> metalCombo = createMetalThemesCombo();
+            JCheckBox boldMetalBtn = new JCheckBox("Usar negrita en etiquetas y botones");
 
             // instalando componentes
+            gbc.anchor = GridBagConstraints.LINE_START;
+            gbc.gridy = row;
+            gbc.weighty = 1.0;
             add(new JLabel("Estilo"), gbc);
             add(metalCombo, gbc);
+
+            row++;
+            gbc.gridy = row;
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            add(boldMetalBtn, gbc);
 
             // eventos
             metalCombo.addItemListener(evt -> {
                 if (evt.getStateChange() == ItemEvent.SELECTED) {
                     if (evt.getItem() instanceof MetalTheme theme) {
-                        App.settings.setProperty("settings.metalLookAndFeel", theme.getName());
+                        App.settings.setProperty("settings.metalTheme", theme.getName());
                     }
                 }
+            });
+            boldMetalBtn.addActionListener(_ -> {
+                boolean selected = boldMetalBtn.isSelected();
+                App.settings.setProperty("settings.swingBoldMetal", String.valueOf(selected));
             });
         }
 
