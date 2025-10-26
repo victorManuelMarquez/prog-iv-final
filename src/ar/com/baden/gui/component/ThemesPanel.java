@@ -122,6 +122,7 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             // componentes
             JComboBox<MetalTheme> metalCombo = createMetalThemesCombo();
             JCheckBox boldMetalBtn = new JCheckBox("Usar negrita en etiquetas y botones");
+            JCheckBox decorationsBtn = new JCheckBox("Decorar ventanas");
 
             // instalando componentes
             gbc.anchor = GridBagConstraints.LINE_START;
@@ -134,6 +135,10 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             gbc.gridy = row;
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             add(boldMetalBtn, gbc);
+
+            row++;
+            gbc.gridy = row;
+            add(decorationsBtn, gbc);
 
             // eventos
             metalCombo.addItemListener(evt -> {
