@@ -118,11 +118,17 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(5, 5, 5, 5);
             int row = 0;
+            String boldMetalKey = "settings.swingBoldMetal";
+            String decorationsKey = "settings.lafWindowsDecorations";
 
             // componentes
             JComboBox<MetalTheme> metalCombo = createMetalThemesCombo();
             JCheckBox boldMetalBtn = new JCheckBox("Usar negrita en etiquetas y botones");
+            boldMetalBtn.setActionCommand(boldMetalKey);
+            boldMetalBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(boldMetalKey)));
             JCheckBox decorationsBtn = new JCheckBox("Decorar ventanas");
+            decorationsBtn.setActionCommand(decorationsKey);
+            decorationsBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(decorationsKey)));
 
             // instalando componentes
             gbc.anchor = GridBagConstraints.LINE_START;
@@ -150,7 +156,19 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             });
             boldMetalBtn.addActionListener(_ -> {
                 boolean selected = boldMetalBtn.isSelected();
-                App.settings.setProperty("settings.swingBoldMetal", String.valueOf(selected));
+                App.settings.setProperty(boldMetalKey, String.valueOf(selected));
+            });
+            boldMetalBtn.addActionListener(evt -> {
+                if (boldMetalKey.equals(evt.getActionCommand())) {
+                    App.settings.setProperty(boldMetalKey, String.valueOf(boldMetalBtn.isSelected()));
+                }
+            });
+            decorationsBtn.addActionListener(evt -> {
+                if (decorationsKey.equals(evt.getActionCommand())) {
+                    String value = String.valueOf(decorationsBtn.isSelected());
+                    App.settings.setProperty(decorationsKey, value);
+                    UIManager.put(decorationsKey, value);
+                }
             });
         }
 
