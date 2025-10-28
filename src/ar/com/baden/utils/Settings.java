@@ -3,7 +3,10 @@ package ar.com.baden.utils;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -22,9 +25,17 @@ public class Settings extends Properties {
     }
 
     private void setDefaults() {
-        String className = UIManager.getCrossPlatformLookAndFeelClassName();
-        defaults.put("settings.lookAndFeel", className);
         defaults.put("settings.confirmToExit", String.valueOf(true));
+        String className = UIManager.getCrossPlatformLookAndFeelClassName();
+        Object swingBoldMetal = UIManager.get("swingBoldMetal");
+        defaults.put("settings.lookAndFeel", className);
+        if (swingBoldMetal != null) {
+            defaults.put("settings.swingBoldMetal", swingBoldMetal.toString());
+        } else {
+            defaults.put("settings.swingBoldMetal", String.valueOf(true));
+        }
+        boolean decorations = JFrame.isDefaultLookAndFeelDecorated() && JDialog.isDefaultLookAndFeelDecorated();
+        defaults.put("settings.lafWindowsDecorations", String.valueOf(decorations));
     }
 
     @Override
