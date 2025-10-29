@@ -1,6 +1,8 @@
 package ar.com.baden.utils;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
@@ -34,6 +36,8 @@ public class Settings extends Properties {
         } else {
             defaults.put("settings.swingBoldMetal", String.valueOf(true));
         }
+        MetalTheme metalTheme = MetalLookAndFeel.getCurrentTheme();
+        defaults.put("settings.metalTheme", metalTheme.getName());
         boolean decorations = JFrame.isDefaultLookAndFeelDecorated() && JDialog.isDefaultLookAndFeelDecorated();
         defaults.put("settings.lafWindowsDecorations", String.valueOf(decorations));
     }
