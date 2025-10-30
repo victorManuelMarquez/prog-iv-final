@@ -15,7 +15,7 @@ public class App {
     }
 
     static void main() {
-        String lafClassName = settings.getProperty("settings.lookAndFeel");
+        String lafClassName = settings.getProperty(Settings.K_LOOK_AND_FEEL);
         if (lafClassName != null) {
             try {
                 UIManager.setLookAndFeel(lafClassName);

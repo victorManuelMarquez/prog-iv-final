@@ -14,7 +14,12 @@ import java.util.Properties;
 
 public class Settings extends Properties {
 
-    public static final String APP_FOLDER = ".baden";
+    public static final String K_CONFIRM_EXIT = "settings.confirmToExit";
+    public static final String K_LOOK_AND_FEEL = "settings.lookAndFeel";
+    public static final String K_SWING_BOLD_METAL = "settings.swingBoldMetal";
+    public static final String K_METAL_THEME = "settings.metalTheme";
+    public static final String K_WINDOWS_DECORATIONS = "settings.lafWindowsDecorations";
+    static final String APP_FOLDER = ".baden";
 
     private final Properties buffer;
     private final PropertyChangeSupport changeSupport;
@@ -27,19 +32,19 @@ public class Settings extends Properties {
     }
 
     private void setDefaults() {
-        defaults.put("settings.confirmToExit", String.valueOf(true));
+        defaults.put(K_CONFIRM_EXIT, String.valueOf(true));
         String className = UIManager.getCrossPlatformLookAndFeelClassName();
         Object swingBoldMetal = UIManager.get("swingBoldMetal");
-        defaults.put("settings.lookAndFeel", className);
+        defaults.put(K_LOOK_AND_FEEL, className);
         if (swingBoldMetal != null) {
-            defaults.put("settings.swingBoldMetal", swingBoldMetal.toString());
+            defaults.put(K_SWING_BOLD_METAL, swingBoldMetal.toString());
         } else {
-            defaults.put("settings.swingBoldMetal", String.valueOf(true));
+            defaults.put(K_SWING_BOLD_METAL, String.valueOf(true));
         }
         MetalTheme metalTheme = MetalLookAndFeel.getCurrentTheme();
-        defaults.put("settings.metalTheme", metalTheme.getName());
+        defaults.put(K_METAL_THEME, metalTheme.getName());
         boolean decorations = JFrame.isDefaultLookAndFeelDecorated() && JDialog.isDefaultLookAndFeelDecorated();
-        defaults.put("settings.lafWindowsDecorations", String.valueOf(decorations));
+        defaults.put(K_WINDOWS_DECORATIONS, String.valueOf(decorations));
     }
 
     @Override

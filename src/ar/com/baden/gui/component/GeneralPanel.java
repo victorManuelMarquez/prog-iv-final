@@ -1,6 +1,7 @@
 package ar.com.baden.gui.component;
 
 import ar.com.baden.main.App;
+import ar.com.baden.utils.Settings;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
@@ -11,8 +12,7 @@ public class GeneralPanel extends SettingsPanel {
 
     public GeneralPanel() {
         // variables
-        String confirmToExitKey = "settings.confirmToExit";
-        String property = App.settings.getProperty(confirmToExitKey);
+        String property = App.settings.getProperty(Settings.K_CONFIRM_EXIT);
 
         // componentes
         confirmToExitBtn = new JCheckBox("Confirmar para salir");
@@ -24,14 +24,14 @@ public class GeneralPanel extends SettingsPanel {
         // eventos
         confirmToExitBtn.addActionListener(_ -> {
             boolean status = confirmToExitBtn.isSelected();
-            App.settings.setProperty(confirmToExitKey, String.valueOf(status));
+            App.settings.setProperty(Settings.K_CONFIRM_EXIT, String.valueOf(status));
         });
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("defaultsRestored".equals(evt.getPropertyName())) {
-            String defaultValue = App.settings.getDefault("settings.confirmToExit");
+            String defaultValue = App.settings.getDefault(Settings.K_CONFIRM_EXIT);
             confirmToExitBtn.setSelected(Boolean.parseBoolean(defaultValue));
         }
     }

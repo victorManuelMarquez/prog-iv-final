@@ -1,6 +1,7 @@
 package ar.com.baden.gui.component;
 
 import ar.com.baden.main.App;
+import ar.com.baden.utils.Settings;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.DefaultMetalTheme;
@@ -76,7 +77,7 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             if (e.getItem() instanceof UIManager.LookAndFeelInfo info) {
                 cardLayout.show(cardPanel, metal.equals(info.getName()) ? metal : "other");
-                App.settings.setProperty("settings.lookAndFeel", info.getClassName());
+                App.settings.setProperty(Settings.K_LOOK_AND_FEEL, info.getClassName());
             }
         }
     }
@@ -87,7 +88,7 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             lafCombo.removeItemListener(this);
             for (int i = 0; i < lafCombo.getItemCount(); i++) {
                 UIManager.LookAndFeelInfo info = lafCombo.getItemAt(i);
-                if (info.getClassName().equals(App.settings.getDefault("settings.lookAndFeel"))) {
+                if (info.getClassName().equals(App.settings.getDefault(Settings.K_LOOK_AND_FEEL))) {
                     lafCombo.setSelectedItem(info);
                 }
             }
@@ -118,17 +119,15 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(5, 5, 5, 5);
             int row = 0;
-            String boldMetalKey = "settings.swingBoldMetal";
-            String decorationsKey = "settings.lafWindowsDecorations";
 
             // componentes
             JComboBox<MetalTheme> metalCombo = createMetalThemesCombo();
             JCheckBox boldMetalBtn = new JCheckBox("Usar negrita en etiquetas y botones");
-            boldMetalBtn.setActionCommand(boldMetalKey);
-            boldMetalBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(boldMetalKey)));
+            boldMetalBtn.setActionCommand(Settings.K_SWING_BOLD_METAL);
+            boldMetalBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(Settings.K_SWING_BOLD_METAL)));
             JCheckBox decorationsBtn = new JCheckBox("Decorar ventanas");
-            decorationsBtn.setActionCommand(decorationsKey);
-            decorationsBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(decorationsKey)));
+            decorationsBtn.setActionCommand(Settings.K_WINDOWS_DECORATIONS);
+            decorationsBtn.setSelected(Boolean.parseBoolean(App.settings.getProperty(Settings.K_WINDOWS_DECORATIONS)));
 
             // instalando componentes
             gbc.anchor = GridBagConstraints.LINE_START;
@@ -150,24 +149,24 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             metalCombo.addItemListener(evt -> {
                 if (evt.getStateChange() == ItemEvent.SELECTED) {
                     if (evt.getItem() instanceof MetalTheme theme) {
-                        App.settings.setProperty("settings.metalTheme", theme.getName());
+                        App.settings.setProperty(Settings.K_METAL_THEME, theme.getName());
                     }
                 }
             });
             boldMetalBtn.addActionListener(_ -> {
                 boolean selected = boldMetalBtn.isSelected();
-                App.settings.setProperty(boldMetalKey, String.valueOf(selected));
+                App.settings.setProperty(Settings.K_SWING_BOLD_METAL, String.valueOf(selected));
             });
             boldMetalBtn.addActionListener(evt -> {
-                if (boldMetalKey.equals(evt.getActionCommand())) {
-                    App.settings.setProperty(boldMetalKey, String.valueOf(boldMetalBtn.isSelected()));
+                if (Settings.K_SWING_BOLD_METAL.equals(evt.getActionCommand())) {
+                    App.settings.setProperty(Settings.K_SWING_BOLD_METAL, String.valueOf(boldMetalBtn.isSelected()));
                 }
             });
             decorationsBtn.addActionListener(evt -> {
-                if (decorationsKey.equals(evt.getActionCommand())) {
+                if (Settings.K_WINDOWS_DECORATIONS.equals(evt.getActionCommand())) {
                     String value = String.valueOf(decorationsBtn.isSelected());
-                    App.settings.setProperty(decorationsKey, value);
-                    UIManager.put(decorationsKey, value);
+                    App.settings.setProperty(Settings.K_WINDOWS_DECORATIONS, value);
+                    UIManager.put(Settings.K_WINDOWS_DECORATIONS, value);
                 }
             });
         }
