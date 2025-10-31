@@ -153,20 +153,17 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
                     }
                 }
             });
-            boldMetalBtn.addActionListener(_ -> {
-                boolean selected = boldMetalBtn.isSelected();
-                App.settings.setProperty(Settings.K_SWING_BOLD_METAL, String.valueOf(selected));
-            });
             boldMetalBtn.addActionListener(evt -> {
                 if (Settings.K_SWING_BOLD_METAL.equals(evt.getActionCommand())) {
-                    App.settings.setProperty(Settings.K_SWING_BOLD_METAL, String.valueOf(boldMetalBtn.isSelected()));
+                    String value = String.valueOf(boldMetalBtn.isSelected());
+                    App.settings.setProperty(Settings.K_SWING_BOLD_METAL, value);
+                    UIManager.put(Settings.K_WINDOWS_DECORATIONS, value);
                 }
             });
             decorationsBtn.addActionListener(evt -> {
                 if (Settings.K_WINDOWS_DECORATIONS.equals(evt.getActionCommand())) {
                     String value = String.valueOf(decorationsBtn.isSelected());
                     App.settings.setProperty(Settings.K_WINDOWS_DECORATIONS, value);
-                    UIManager.put(Settings.K_WINDOWS_DECORATIONS, value);
                 }
             });
         }
