@@ -164,6 +164,8 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
                 if (Settings.K_WINDOWS_DECORATIONS.equals(evt.getActionCommand())) {
                     String value = String.valueOf(decorationsBtn.isSelected());
                     App.settings.setProperty(Settings.K_WINDOWS_DECORATIONS, value);
+                    JFrame.setDefaultLookAndFeelDecorated(decorationsBtn.isSelected());
+                    JDialog.setDefaultLookAndFeelDecorated(decorationsBtn.isSelected());
                 }
             });
         }
