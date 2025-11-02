@@ -132,7 +132,6 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
             // instalando componentes
             gbc.anchor = GridBagConstraints.LINE_START;
             gbc.gridy = row;
-            gbc.weighty = 1.0;
             add(new JLabel("Estilo"), gbc);
             add(metalCombo, gbc);
 
@@ -143,6 +142,7 @@ public class ThemesPanel extends SettingsPanel implements ItemListener {
 
             row++;
             gbc.gridy = row;
+            gbc.weightx = 1.0;
             add(decorationsBtn, gbc);
 
             // eventos
