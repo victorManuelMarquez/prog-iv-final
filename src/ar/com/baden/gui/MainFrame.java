@@ -7,8 +7,20 @@ public class MainFrame extends JFrame {
 
     public MainFrame(String title) throws HeadlessException {
         super(title);
+        // componentes
+        setJMenuBar(new JMenuBar());
+        JMenu fileMenu = new JMenu("Archivo");
+        JMenuItem exitOption = new JMenuItem("Salir");
+
+        // instalando componentes
+        fileMenu.add(exitOption);
+        getJMenuBar().add(fileMenu);
+
         // ajustes
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // eventos
+        exitOption.addActionListener(_ -> dispose());
     }
 
     @Override
