@@ -10,9 +10,12 @@ public class MainFrame extends JFrame {
         // componentes
         setJMenuBar(new JMenuBar());
         JMenu fileMenu = new JMenu("Archivo");
+        JMenuItem settingsOption = new JMenuItem("Configuración");
         JMenuItem exitOption = new JMenuItem("Salir");
 
         // instalando componentes
+        fileMenu.add(settingsOption);
+        fileMenu.addSeparator();
         fileMenu.add(exitOption);
         getJMenuBar().add(fileMenu);
 
