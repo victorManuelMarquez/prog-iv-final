@@ -25,6 +25,11 @@ public class App {
 
     static void main() {
         String userLafClassName = properties.getProperty("settings.lookAndFeel");
+        String lafDecorations = properties.getProperty("settings.lafWindowsDecorations");
+        if (Boolean.parseBoolean(lafDecorations)) {
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
+        }
         if (userLafClassName != null) {
             try {
                 UIManager.setLookAndFeel(userLafClassName);
