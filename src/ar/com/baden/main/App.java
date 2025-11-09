@@ -26,9 +26,13 @@ public class App {
     static void main() {
         String userLafClassName = properties.getProperty("settings.lookAndFeel");
         String lafDecorations = properties.getProperty("settings.lafWindowsDecorations");
+        String swingBold = properties.getProperty("settings.swingBoldMetal");
         if (Boolean.parseBoolean(lafDecorations)) {
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
+        }
+        if (swingBold != null) {
+            UIManager.put("swing.boldMetal", Boolean.parseBoolean(swingBold));
         }
         if (userLafClassName != null) {
             try {
