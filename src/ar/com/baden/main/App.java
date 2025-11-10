@@ -3,6 +3,8 @@ package ar.com.baden.main;
 import ar.com.baden.gui.MainFrame;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,12 +29,16 @@ public class App {
         String userLafClassName = properties.getProperty("settings.lookAndFeel");
         String lafDecorations = properties.getProperty("settings.lafWindowsDecorations");
         String swingBold = properties.getProperty("settings.swingBoldMetal");
+        String metalTheme = properties.getProperty("settings.metalTheme");
         if (Boolean.parseBoolean(lafDecorations)) {
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
         }
         if (swingBold != null) {
             UIManager.put("swing.boldMetal", Boolean.parseBoolean(swingBold));
+        }
+        if ("Steel".equals(metalTheme)) {
+            MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme());
         }
         if (userLafClassName != null) {
             try {
