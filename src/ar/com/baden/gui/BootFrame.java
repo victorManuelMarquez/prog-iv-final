@@ -8,8 +8,14 @@ public class BootFrame extends JFrame implements Runnable {
     public BootFrame(String title) throws HeadlessException {
         super(title);
         // componentes
-        getContentPane().add(new JScrollPane(new JTextArea(20, 40)));
-        getContentPane().add(new JProgressBar(), BorderLayout.SOUTH);
+        JTextArea infoPane = new JTextArea(15, 40);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(infoPane);
+        JProgressBar progressBar = new JProgressBar();
+
+        // instalando componentes
+        getContentPane().add(scrollPane);
+        getContentPane().add(progressBar, BorderLayout.SOUTH);
 
         // ajustes
         setDefaultCloseOperation(EXIT_ON_CLOSE);
