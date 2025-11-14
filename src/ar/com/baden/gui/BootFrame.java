@@ -8,10 +8,11 @@ public class BootFrame extends JFrame implements Runnable {
     public BootFrame(String title) throws HeadlessException {
         super(title);
         // componentes
-        JTextArea infoPane = new JTextArea(15, 40);
+        JTextArea infoArea = new InfoArea();
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(infoPane);
+        scrollPane.setViewportView(infoArea);
         JProgressBar progressBar = new JProgressBar();
+        progressBar.setStringPainted(true);
 
         // instalando componentes
         getContentPane().add(scrollPane);
@@ -26,6 +27,19 @@ public class BootFrame extends JFrame implements Runnable {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private static class InfoArea extends JTextArea {
+
+        public InfoArea() {
+            super(15, 40);
+            setEditable(false);
+            setFocusable(false);
+            getCaret().setVisible(false);
+            setWrapStyleWord(true);
+            setLineWrap(true);
+        }
+
     }
 
 }
