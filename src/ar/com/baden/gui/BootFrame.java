@@ -65,7 +65,7 @@ public class BootFrame extends JFrame implements Runnable {
 
     }
 
-    private static class BootstrapWorker extends SwingWorker<Void, String> {
+    private static class BootstrapWorker extends SwingWorker<MainFrame, String> {
 
         private final InfoArea infoArea;
 
@@ -74,14 +74,14 @@ public class BootFrame extends JFrame implements Runnable {
         }
 
         @Override
-        protected Void doInBackground() throws Exception {
+        protected MainFrame doInBackground() throws Exception {
             publishNewLine("Bienvenido...");
             for (int i = 0; i < 10; i++) {
                 publish(String.format("Procesando... %d\n", i));
                 setProgress(i * 100 / 10);
                 Thread.sleep(1000);
             }
-            return null;
+            return new MainFrame("Bienvenido");
         }
 
         @Override
@@ -91,8 +91,16 @@ public class BootFrame extends JFrame implements Runnable {
 
         @Override
         protected void done() {
-            Window window = SwingUtilities.windowForComponent(infoArea);
-            window.dispose();
+            try {
+                Window window = SwingUtilities.windowForComponent(infoArea);
+                MainFrame mainFrame = get();
+                mainFrame.pack();
+                mainFrame.setLocationRelativeTo(null);
+                mainFrame.setVisible(true);
+                window.dispose();
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
         }
 
         public void publishNewLine(String value) {
