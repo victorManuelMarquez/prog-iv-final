@@ -74,13 +74,8 @@ public class BootFrame extends JFrame implements Runnable {
         }
 
         @Override
-        protected MainFrame doInBackground() throws Exception {
+        protected MainFrame doInBackground() {
             publishNewLine("Bienvenido...");
-            for (int i = 0; i < 10; i++) {
-                publish(String.format("Procesando... %d\n", i));
-                setProgress(i * 100 / 10);
-                Thread.sleep(1000);
-            }
             return new MainFrame("Bienvenido");
         }
 
