@@ -2,6 +2,7 @@ package ar.com.baden.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
 
@@ -10,7 +11,9 @@ public class MainFrame extends JFrame {
         // componentes
         setJMenuBar(new JMenuBar());
         JMenu fileMenu = new JMenu("Archivo");
+        fileMenu.setMnemonic(KeyEvent.VK_A);
         JMenuItem exitItem = new JMenuItem("Salir");
+        exitItem.setMnemonic(KeyEvent.VK_S);
 
         // instalando componentes
         fileMenu.add(exitItem);
