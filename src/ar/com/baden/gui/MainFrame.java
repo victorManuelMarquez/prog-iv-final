@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
         fileMenu.setMnemonic(KeyEvent.VK_A);
         JMenuItem exitItem = new JMenuItem("Salir");
         exitItem.setMnemonic(KeyEvent.VK_S);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_DOWN_MASK));
 
         // instalando componentes
         fileMenu.add(exitItem);
