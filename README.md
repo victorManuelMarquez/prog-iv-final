@@ -9,3 +9,6 @@ Esta es una nueva versión (aún en desarrollo) de un programa de gestión de st
 2. Diseño de la base de datos
 3. CRUD
 4. Impresión de informes.
+
+## Notas
+Se actualizó la versión de Java: de jdk 8 a open jdk 25
