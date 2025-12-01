@@ -1,5 +1,5 @@
 # Proyecto final de Programación IV
-Una reconstrucción del proyecto original presentado en el 2019.
+Una reconstrucción del proyecto original presentado en el 2019 y de repaso de Java.
 
 ## Descripción
 Esta es una nueva versión (aún en desarrollo) de un programa de gestión de stock de un comercio pequeño/mediano.
