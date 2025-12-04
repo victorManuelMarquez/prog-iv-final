@@ -3,6 +3,7 @@ Una reconstrucción del proyecto original presentado en el 2019 y de repaso de J
 
 ## Descripción
 Esta es una nueva versión (aún en desarrollo) de un programa de gestión de stock de un comercio pequeño/mediano.
+De momento el desarrollo de este programa es solo de pasatiempo.
 
 ## Metas
 1. Diseño de la interfaz gráfica
