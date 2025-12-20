@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
         setExtendedState(MAXIMIZED_BOTH);
 
         // eventos
-        exitItem.addActionListener(_ -> dispose());
+        exitItem.addActionListener(evt -> dispose());
     }
 
     @Override

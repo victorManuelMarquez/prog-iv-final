@@ -12,4 +12,4 @@ De momento el desarrollo de este programa es solo de pasatiempo.
 4. Impresión de informes.
 
 ## Notas
-Se actualizó la versión de Java: de jdk 8 a open jdk 25
+Se vuelve a la versión Java 21 debido a un cambio de IDE.

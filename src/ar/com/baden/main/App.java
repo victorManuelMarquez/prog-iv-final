@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class App {
 
-    static void main() {
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame("Bienvenido");
             mainFrame.pack();
