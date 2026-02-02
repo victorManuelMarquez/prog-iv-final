@@ -2,6 +2,7 @@ package ar.com.baden.main.ar.com.baden.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
@@ -18,11 +19,12 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
 
         // ajustes
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
 
         // eventos
         exitItem.addActionListener(evt -> dispose());
+        addWindowListener(new ClosingMainFrame());
     }
 
     @Override
@@ -43,6 +45,19 @@ public class MainFrame extends JFrame {
         setSize(size);
         setPreferredSize(packSize);
         setMinimumSize(new Dimension(Math.min(720, size.width), Math.min(540, size.height)));
+    }
+
+    static class ClosingMainFrame extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            Window sourceWindow = e.getWindow();
+            int response = ClosingDialog.createAndShow(sourceWindow);
+            if (response == JOptionPane.OK_OPTION || response == JOptionPane.DEFAULT_OPTION) {
+                sourceWindow.dispose();
+            }
+        }
+
     }
 
 }
