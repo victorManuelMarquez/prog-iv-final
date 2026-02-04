@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class ClosingDialog extends ModalDialog {
@@ -45,6 +46,9 @@ public class ClosingDialog extends ModalDialog {
         setLayout(gl);
 
         // eventos
+        SwingUtilities.invokeLater(() -> {
+            getRootPane().setDefaultButton(okButton);
+        });
         okButton.addActionListener(evt -> {
             response = JOptionPane.OK_OPTION;
             dispose();

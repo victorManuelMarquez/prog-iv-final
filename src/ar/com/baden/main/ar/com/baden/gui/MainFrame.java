@@ -23,10 +23,10 @@ public class MainFrame extends JFrame {
         setExtendedState(MAXIMIZED_BOTH);
 
         // eventos
+        addWindowListener(new ClosingMainFrame());
         exitItem.addActionListener(evt -> {
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         });
-        addWindowListener(new ClosingMainFrame());
     }
 
     @Override
