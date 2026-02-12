@@ -1,6 +1,7 @@
 package ar.com.baden.main.ar.com.baden.gui;
 
 import java.awt.Window;
+import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -21,7 +22,9 @@ public class ClosingDialog extends ModalDialog {
         JLabel iconLabel = new JLabel(UIManager.getIcon("OptionPane.questionIcon"));
         JLabel msgLabel = new JLabel("¿Está seguro que desea abandonar el programa?");
         JButton okButton = new JButton("Salir");
+        okButton.setMnemonic(KeyEvent.VK_S);
         JButton cancelBtn = new JButton("Cancelar");
+        cancelBtn.setMnemonic(KeyEvent.VK_C);
 
         // instalando componentes
         gl.setAutoCreateContainerGaps(true);
