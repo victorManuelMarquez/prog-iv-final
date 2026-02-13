@@ -12,11 +12,13 @@ public class MainFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Archivo");
         JMenuItem exitItem = new JMenuItem("Salir");
+        MainToolbar mainToolbar = new MainToolbar();
 
         // instalando componentes
         fileMenu.add(exitItem);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
+        getContentPane().add(mainToolbar, BorderLayout.NORTH);
 
         // ajustes
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
